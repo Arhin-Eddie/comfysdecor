@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 
 const LOCAL_UPLOADS_DIR = path.join(__dirname, 'assets', 'uploads');
 if (!fs.existsSync(LOCAL_UPLOADS_DIR)) {
@@ -61,11 +61,12 @@ async function uploadImage(buffer, originalFilename, contentType = 'image/jpeg')
 
       // Construct public URL
       let publicUrl = '';
-      if (process.env.R2_PUBLIC_URL) {
+      if (process.env.R2_PUBLIC_URL && process.env.R2_PUBLIC_URL.startsWith('http')) {
         const base = process.env.R2_PUBLIC_URL.replace(/\/+$/, '');
         publicUrl = `${base}/${filename}`;
       } else {
-        publicUrl = `https://${bucketName}.${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${filename}`;
+        // Safe backend stream route that fetches directly from R2 without requiring public r2.dev dev access
+        publicUrl = `/api/media/${filename}`;
       }
 
       return {
@@ -93,12 +94,23 @@ async function uploadImage(buffer, originalFilename, contentType = 'image/jpeg')
     filename,
     size: buffer.length,
     contentType,
-    note: 'Image saved locally. Set Cloudflare R2 credentials in .env to upload directly to R2 bucket.'
+    note: 'Image saved locally.'
   };
+}
+
+async function getImageObject(key) {
+  if (!isR2Configured()) return null;
+  const client = getR2Client();
+  const command = new GetObjectCommand({
+    Bucket: process.env.R2_BUCKET_NAME,
+    Key: key
+  });
+  return await client.send(command);
 }
 
 module.exports = {
   isR2Configured,
   uploadImage,
+  getImageObject,
   sanitizeFilename
 };

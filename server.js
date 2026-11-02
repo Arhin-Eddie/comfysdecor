@@ -203,6 +203,22 @@ app.put('/api/store-info', requireAdminAuth, async (req, res) => {
   }
 });
 
+// Public Image Stream Route from Cloudflare R2
+app.get('/api/media/:key', async (req, res) => {
+  try {
+    const key = req.params.key;
+    const r2Obj = await r2.getImageObject(key);
+    if (!r2Obj || !r2Obj.Body) {
+      return res.status(404).send('Image not found in storage');
+    }
+    res.setHeader('Content-Type', r2Obj.ContentType || 'image/jpeg');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    r2Obj.Body.pipe(res);
+  } catch (err) {
+    res.status(404).send('Image not found');
+  }
+});
+
 // API: Cloudflare R2 Image Upload & Storage Status (Admin Only)
 app.get('/api/storage/status', (req, res) => {
   res.json({
