@@ -371,34 +371,57 @@ img {
   flex-shrink: 0;
 }
 
+/* Brand SVG Icons */
+.brand-svg-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), fill 0.2s ease, color 0.2s ease;
+}
+
+.wa-svg {
+  color: #25D366;
+}
+
+.snap-svg {
+  color: #CA8A04;
+}
+
 .header-whatsapp-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background-color: var(--color-accent-tint);
-  border: 1px solid rgba(75, 88, 66, 0.3);
-  color: var(--color-accent);
+  gap: 6px;
+  background-color: #EBFBF3;
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  color: #128C7E;
   padding: 4px 10px;
   border-radius: var(--radius-xs);
   font-size: 0.78rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
+.header-whatsapp-pill .wa-svg {
+  color: #25D366;
+}
+
 .header-whatsapp-pill:hover {
-  background-color: var(--color-accent);
+  background-color: #25D366;
+  border-color: #25D366;
   color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35);
+  transform: translateY(-1px);
 }
 
-.header-wa-icon {
-  font-size: 15px;
-  color: var(--color-accent);
+.header-whatsapp-pill:hover .wa-svg {
+  color: #FFFFFF;
+  transform: scale(1.1);
 }
 
-.header-whatsapp-pill:hover .header-wa-icon {
-  color: #FFFFFF;
+.header-whatsapp-pill:active {
+  transform: scale(0.97);
 }
 
 .header-admin-pill {
@@ -691,7 +714,7 @@ img {
 .channel-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   font-size: 0.8rem;
   color: var(--color-text-main);
   background: var(--color-surface);
@@ -699,41 +722,65 @@ img {
   border-radius: var(--radius-xs);
   padding: 6px 12px;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.channel-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.channel-pill:active {
+  transform: scale(0.97);
 }
 
 .channel-pill .pill-icon {
   font-size: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .channel-pill.wa-pill {
-  border-color: rgba(37, 211, 102, 0.4);
+  border-color: rgba(37, 211, 102, 0.45);
 }
 
-.channel-pill.wa-pill .pill-icon {
+.channel-pill.wa-pill .wa-svg {
   color: #25D366;
 }
 
 .channel-pill.wa-pill:hover {
   background-color: #F0FDF4;
   border-color: #25D366;
+  box-shadow: 0 3px 12px rgba(37, 211, 102, 0.2);
+}
+
+.channel-pill.wa-pill:hover .wa-svg {
+  transform: scale(1.1);
 }
 
 .channel-pill.snap-pill {
-  border-color: rgba(202, 138, 4, 0.35);
+  border-color: rgba(202, 138, 4, 0.45);
 }
 
-.channel-pill.snap-pill .pill-icon {
+.channel-pill.snap-pill .snap-svg {
   color: #CA8A04;
 }
 
 .channel-pill.snap-pill:hover {
   background-color: #FEFCE8;
   border-color: #CA8A04;
+  box-shadow: 0 3px 12px rgba(202, 138, 4, 0.2);
+}
+
+.channel-pill.snap-pill:hover .snap-svg {
+  transform: scale(1.1);
 }
 
 .channel-pill.delivery-pill {
   color: var(--color-accent);
+  cursor: default;
 }
 
 .channel-pill.delivery-pill .pill-icon {
@@ -752,8 +799,36 @@ img {
 .channel-pill.flyer-pill:hover {
   background: #FDF7E7;
   border-color: var(--color-primary);
+  box-shadow: 0 3px 10px rgba(197, 155, 39, 0.2);
 }
-  color: var(--color-primary);
+
+/* Footer brand links */
+.footer-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  vertical-align: middle;
+}
+
+.footer-brand-link.wa-link {
+  color: #15803D;
+}
+
+.footer-brand-link.wa-link:hover {
+  color: #25D366;
+  text-decoration: underline;
+}
+
+.footer-brand-link.snap-link {
+  color: #854D0E;
+}
+
+.footer-brand-link.snap-link:hover {
+  color: #CA8A04;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
@@ -987,14 +1062,21 @@ img {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   position: relative;
 }
 
 .artifact-card:hover {
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-subtle);
+  transform: translateY(-3px);
+  border-color: rgba(197, 155, 39, 0.45);
+  box-shadow: 0 10px 24px -4px rgba(44, 42, 38, 0.12), 0 4px 8px -2px rgba(44, 42, 38, 0.06);
+}
+
+.artifact-card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 /* 4:5 Image Frame with neutral linen backing */
@@ -1010,11 +1092,11 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .artifact-card:hover .card-img {
-  transform: scale(1.025);
+  transform: scale(1.045);
 }
 
 /* Subtle overlay flags */
@@ -2061,25 +2143,33 @@ img {
 }
 
 .btn-whatsapp {
-  height: 40px;
-  background-color: var(--color-accent);
-  color: #FFF;
-  font-size: 0.85rem;
+  height: 44px;
+  background-color: #25D366;
+  color: #FFFFFF;
+  font-size: 0.88rem;
   font-weight: 600;
   border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xs);
-  transition: background-color 0.15s;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.28);
+  text-decoration: none;
 }
 
-.btn-whatsapp span:first-child {
-  font-size: 18px;
+.btn-whatsapp .wa-svg {
+  color: #FFFFFF;
 }
 
 .btn-whatsapp:hover {
-  background-color: #244135;
+  background-color: #20BA5A;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-whatsapp:active {
+  transform: scale(0.98);
 }
 
 .inquire-note {
@@ -2509,4 +2599,170 @@ img {
   color: var(--color-text-faint);
   margin-top: 3px;
   display: block;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATION SYSTEM & MICRO-ANIMATIONS
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  width: calc(100% - 32px);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .toast-container {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+    width: auto;
+  }
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  font-size: 0.84rem;
+  line-height: 1.4;
+  animation: toastSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast.toast-closing {
+  animation: toastSlideOut 0.24s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.toast-icon .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.toast-success .toast-icon {
+  background-color: #E8F8F0;
+  color: #15803D;
+}
+.toast-success {
+  border-left: 4px solid #25D366;
+}
+
+.toast-error .toast-icon {
+  background-color: #FEF2F2;
+  color: #DC2626;
+}
+.toast-error {
+  border-left: 4px solid #EF4444;
+}
+
+.toast-info .toast-icon {
+  background-color: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+.toast-info {
+  border-left: 4px solid var(--color-primary);
+}
+
+.toast-message {
+  flex-grow: 1;
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.toast-close-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  margin-right: -4px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.toast-close-btn:hover {
+  color: var(--color-text-main);
+  background-color: var(--color-surface-subtle);
+}
+
+.toast-close-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
+
+/* Micro-animation: Shake for invalid inputs / login modal errors */
+@keyframes shakeAnimation {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shakeAnimation 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Interactive press micro-animations */
+button:active:not(:disabled),
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.cat-pill:active,
+.channel-pill:active {
+  transform: scale(0.97);
+}
+
+/* Elegant Focus ring on inputs */
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus,
+.search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.16);
+  outline: none;
 }

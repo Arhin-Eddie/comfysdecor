@@ -651,12 +651,12 @@
         state.storeInfo = data.data;
         renderStoreInfo();
         closeSettingsModal();
-        alert('Store settings & contacts successfully updated in Neon PostgreSQL!');
+        showToast('Store settings & contacts successfully updated!', 'success');
       } else {
-        alert('Could not update store settings: ' + (data.error || 'Server error'));
+        showToast('Could not update store settings: ' + (data.error || 'Server error'), 'error');
       }
     } catch (err) {
-      alert('Error updating store settings: ' + err.message);
+      showToast('Error updating store settings: ' + err.message, 'error');
     } finally {
       els.saveSettingsBtn.disabled = false;
       els.saveSettingsBtnText.textContent = 'Save Store Settings';
@@ -783,14 +783,27 @@
           history.pushState(null, '', '/admin');
         }
         setViewMode('admin');
+        showToast('Welcome back! Admin Registry unlocked.', 'success');
       } else {
         els.loginAlertText.textContent = data.error || 'Invalid username or password. Access denied.';
         els.loginAlertBox.classList.remove('hidden');
         els.adminPasscode.select();
+        const modalBox = els.loginModal ? (els.loginModal.querySelector('.login-box') || els.loginModal) : null;
+        if (modalBox) {
+          modalBox.classList.remove('shake');
+          void modalBox.offsetWidth; // Force CSS reflow
+          modalBox.classList.add('shake');
+        }
       }
     } catch (err) {
       els.loginAlertText.textContent = 'Connection error. Check network or server status.';
       els.loginAlertBox.classList.remove('hidden');
+      const modalBox = els.loginModal ? (els.loginModal.querySelector('.login-box') || els.loginModal) : null;
+      if (modalBox) {
+        modalBox.classList.remove('shake');
+        void modalBox.offsetWidth;
+        modalBox.classList.add('shake');
+      }
     } finally {
       els.submitLoginBtn.disabled = false;
       els.loginBtnText.textContent = 'Log In as Admin';
@@ -805,6 +818,57 @@
       history.pushState(null, '', '/');
     }
     setViewMode('public');
+    showToast('Signed out of Admin Registry.', 'info');
+  }
+
+  /**
+   * ACCESSIBLE NON-BLOCKING TOAST NOTIFICATIONS
+   * type: 'success' | 'error' | 'info'
+   */
+  function showToast(message, type = 'info', duration = 3500) {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+      console.log(`[Toast ${type}]`, message);
+      return;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.setAttribute('role', 'alert');
+
+    let iconSymbol = 'info';
+    if (type === 'success') iconSymbol = 'check_circle';
+    else if (type === 'error') iconSymbol = 'error';
+
+    toast.innerHTML = `
+      <div class="toast-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">${iconSymbol}</span>
+      </div>
+      <div class="toast-message">${escapeHtml(message)}</div>
+      <button type="button" class="toast-close-btn" aria-label="Close notification">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    `;
+
+    const closeBtn = toast.querySelector('.toast-close-btn');
+    let dismissTimeout;
+
+    const dismiss = () => {
+      clearTimeout(dismissTimeout);
+      if (toast.classList.contains('toast-closing')) return;
+      toast.classList.add('toast-closing');
+      toast.addEventListener('animationend', () => {
+        toast.remove();
+      }, { once: true });
+    };
+
+    closeBtn.addEventListener('click', dismiss);
+
+    if (duration > 0) {
+      dismissTimeout = setTimeout(dismiss, duration);
+    }
+
+    container.appendChild(toast);
   }
 
   /**
@@ -1379,11 +1443,12 @@
         item.stockQty = data.data.stockQty;
         setCachedProducts(state.records);
         renderAll();
+        showToast(`Stock updated: ${item.title} (${item.stockQty} in stock)`, 'success');
       } else {
-        alert('Could not update stock in database: ' + (data.error || 'Server error'));
+        showToast('Could not update stock in database: ' + (data.error || 'Server error'), 'error');
       }
     } catch (err) {
-      alert('Network error connecting to Neon database: ' + err.message);
+      showToast('Network error connecting to Neon database: ' + err.message, 'error');
     }
   }
 
@@ -1409,11 +1474,12 @@
         item.published = data.data.published;
         setCachedProducts(state.records);
         renderAll();
+        showToast(`"${item.title}" is now ${item.published ? 'visible in catalog' : 'hidden from public'}.`, 'info');
       } else {
-        alert('Could not update status in database: ' + (data.error || 'Server error'));
+        showToast('Could not update status in database: ' + (data.error || 'Server error'), 'error');
       }
     } catch (err) {
-      alert('Network error connecting to Neon database: ' + err.message);
+      showToast('Network error connecting to Neon database: ' + err.message, 'error');
     }
   }
 
@@ -1442,11 +1508,12 @@
         state.records = state.records.filter(r => r.id !== id);
         setCachedProducts(state.records);
         renderAll();
+        showToast(`Removed "${item.title}" from catalog.`, 'info');
       } else {
-        alert('Could not delete product from database: ' + (data.error || 'Server error'));
+        showToast('Could not delete product from database: ' + (data.error || 'Server error'), 'error');
       }
     } catch (err) {
-      alert('Network error connecting to Neon database: ' + err.message);
+      showToast('Network error connecting to Neon database: ' + err.message, 'error');
     }
   }
 
@@ -1618,11 +1685,12 @@
         setCachedProducts(state.records);
         renderAll();
         closeModal();
+        showToast(isEdit ? `Updated "${data.data.title}" successfully.` : `Added "${data.data.title}" to catalog!`, 'success');
       } else {
-        alert('Database error: ' + (data.error || 'Failed to save product in Neon.'));
+        showToast('Database error: ' + (data.error || 'Failed to save product in Neon.'), 'error');
       }
     } catch (err) {
-      alert('Network or database connection error: ' + err.message);
+      showToast('Network or database connection error: ' + err.message, 'error');
     } finally {
       els.saveArtifactBtn.disabled = false;
       els.saveBtnText.textContent = isEdit ? 'Save Changes' : 'Save Item';
@@ -1669,15 +1737,15 @@
             state.records = data.data;
             setCachedProducts(state.records);
             renderAll();
-            alert(`Successfully imported ${data.data.length} items to Neon PostgreSQL database.`);
+            showToast(`Successfully imported ${data.data.length} items to database.`, 'success');
           } else {
-            alert('Database import failed: ' + (data.error || 'Unknown error'));
+            showToast('Database import failed: ' + (data.error || 'Unknown error'), 'error');
           }
         } else {
-          alert('Invalid file format. Expected a JSON array of items.');
+          showToast('Invalid file format. Expected a JSON array of items.', 'error');
         }
       } catch (err) {
-        alert('Could not parse JSON file: ' + err.message);
+        showToast('Could not parse JSON file: ' + err.message, 'error');
       }
     };
     reader.readAsText(file);
@@ -1699,7 +1767,7 @@
   async function uploadImageViaR2(file, targetInputEl, buttonLabelEl) {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      alert('Please choose a valid image file (JPEG, PNG, WEBP, AVIF).');
+      showToast('Please choose a valid image file (JPEG, PNG, WEBP, AVIF).', 'error');
       return;
     }
 
@@ -1731,16 +1799,17 @@
       const json = await res.json();
       if (res.ok && json.success && json.data && json.data.url) {
         targetInputEl.value = json.data.url;
+        showToast(json.data.storage === 'cloudflare-r2' ? 'Uploaded to Cloudflare R2 Edge CDN!' : 'Image uploaded successfully!', 'success');
         if (buttonLabelEl) {
           buttonLabelEl.textContent = json.data.storage === 'cloudflare-r2' ? 'Saved to R2!' : 'Uploaded!';
           setTimeout(() => { if (buttonLabelEl) buttonLabelEl.textContent = originalText; }, 2500);
         }
       } else {
-        alert('Upload error: ' + (json.error || 'Server could not process image'));
+        showToast('Upload error: ' + (json.error || 'Server could not process image'), 'error');
         if (buttonLabelEl) buttonLabelEl.textContent = originalText;
       }
     } catch (err) {
-      alert('Upload connection error: ' + err.message);
+      showToast('Upload connection error: ' + err.message, 'error');
       if (buttonLabelEl) buttonLabelEl.textContent = originalText;
     }
   }
@@ -1773,16 +1842,16 @@
         state.records = data.data;
         setCachedProducts(state.records);
         renderAll();
-        alert(`Neon database successfully reset with ${data.data.length} signature flyer items.`);
+        showToast(`Neon database successfully reset with ${data.data.length} signature flyer items.`, 'success');
       } else {
-        alert('Could not reset Neon database: ' + (data.error || 'Server error'));
+        showToast('Could not reset Neon database: ' + (data.error || 'Server error'), 'error');
       }
     } catch (err) {
       console.warn('Neon connection error, restoring built-in signature catalog locally:', err);
       state.records = [...BUILTIN_FLYER_PRODUCTS];
       setCachedProducts(state.records);
       renderAll();
-      alert(`Signature catalog loaded locally with ${state.records.length} items.`);
+      showToast(`Signature catalog loaded locally with ${state.records.length} items.`, 'info');
     }
   }
 
