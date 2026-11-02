@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "styles.css,app.js,index.html,site.webmanifest,robots.txt,assets/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api",
@@ -15,10 +20,6 @@
     },
     {
       "source": "/admin",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/((?!api/|assets/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]

@@ -159,7 +159,24 @@ app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, 'robots.txt'));
 });
 
-// Serve static assets and static files
+// Explicit static asset routes guaranteeing inclusion in Vercel Serverless Trace & correct MIME types
+app.get('/styles.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css; charset=UTF-8');
+  res.sendFile(path.join(__dirname, 'styles.css'));
+});
+
+app.get('/app.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+  res.sendFile(path.join(__dirname, 'app.js'));
+});
+
+app.get('/site.webmanifest', (req, res) => {
+  res.setHeader('Content-Type', 'application/manifest+json');
+  res.sendFile(path.join(__dirname, 'site.webmanifest'));
+});
+
+// Serve static assets directory
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname)));
 
 // Admin Authentication Endpoints (Verified directly against Neon PostgreSQL)
