@@ -4,8 +4,19 @@ const path = require('path');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 
 const LOCAL_UPLOADS_DIR = path.join(__dirname, 'assets', 'uploads');
-if (!fs.existsSync(LOCAL_UPLOADS_DIR)) {
-  fs.mkdirSync(LOCAL_UPLOADS_DIR, { recursive: true });
+
+function ensureLocalUploadsDir() {
+  try {
+    if (!fs.existsSync(LOCAL_UPLOADS_DIR)) {
+      fs.mkdirSync(LOCAL_UPLOADS_DIR, { recursive: true });
+    }
+    return true;
+  } catch (err) {
+    // In serverless environments like Vercel, the local container filesystem is read-only.
+    // Cloudflare R2 is the primary storage engine.
+    console.warn('Local uploads dir not writable (expected in serverless):', err.message);
+    return false;
+  }
 }
 
 function isR2Configured() {
@@ -83,19 +94,25 @@ async function uploadImage(buffer, originalFilename, contentType = 'image/jpeg')
   }
 
   // Graceful Local Fallback if Cloudflare R2 is not configured or fails
-  const localFilePath = path.join(LOCAL_UPLOADS_DIR, filename);
-  fs.writeFileSync(localFilePath, buffer);
-  const localUrl = `/assets/uploads/${filename}`;
+  try {
+    ensureLocalUploadsDir();
+    const localFilePath = path.join(LOCAL_UPLOADS_DIR, filename);
+    fs.writeFileSync(localFilePath, buffer);
+    const localUrl = `/assets/uploads/${filename}`;
 
-  return {
-    success: true,
-    storage: 'local-fallback',
-    url: localUrl,
-    filename,
-    size: buffer.length,
-    contentType,
-    note: 'Image saved locally.'
-  };
+    return {
+      success: true,
+      storage: 'local-fallback',
+      url: localUrl,
+      filename,
+      size: buffer.length,
+      contentType,
+      note: 'Image saved locally.'
+    };
+  } catch (err) {
+    console.error('Failed to write local file fallback:', err);
+    throw new Error('Image storage error. Please ensure Cloudflare R2 credentials are configured in environment variables.');
+  }
 }
 
 async function getImageObject(key) {
