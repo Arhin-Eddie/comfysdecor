@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 const db = require('./db');
+const r2 = require('./r2');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -137,6 +138,44 @@ app.put('/api/store-info', requireAdminAuth, async (req, res) => {
   } catch (err) {
     console.error('Error updating store info:', err);
     res.status(500).json({ success: false, error: err.message || 'Database error updating store info' });
+  }
+});
+
+// API: Cloudflare R2 Image Upload & Storage Status (Admin Only)
+app.get('/api/storage/status', (req, res) => {
+  res.json({
+    success: true,
+    r2Configured: r2.isR2Configured(),
+    bucket: process.env.R2_BUCKET_NAME || null,
+    storageType: r2.isR2Configured() ? 'Cloudflare R2' : 'Local Fallback (/assets/uploads)'
+  });
+});
+
+app.post('/api/upload', requireAdminAuth, async (req, res) => {
+  try {
+    const { imageBase64, filename, contentType } = req.body || {};
+    if (!imageBase64) {
+      return res.status(400).json({ success: false, error: 'imageBase64 data is required' });
+    }
+
+    let mimeType = contentType || 'image/jpeg';
+    let base64Clean = imageBase64;
+    const match = imageBase64.match(/^data:([^;]+);base64,(.+)$/);
+    if (match) {
+      mimeType = match[1];
+      base64Clean = match[2];
+    }
+
+    const buffer = Buffer.from(base64Clean, 'base64');
+    if (buffer.length > 15 * 1024 * 1024) {
+      return res.status(400).json({ success: false, error: 'Image size exceeds maximum 15MB limit' });
+    }
+
+    const result = await r2.uploadImage(buffer, filename || 'product-image.jpg', mimeType);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    console.error('Upload handler error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Image upload error' });
   }
 });
 

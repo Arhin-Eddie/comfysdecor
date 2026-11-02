@@ -553,9 +553,13 @@ img {
   gap: var(--space-md);
 }
 
-/* Storefront Brand Intro Strip (Clean, compact, restrained) */
+/* Storefront Brand Intro Strip (Clean, compact, restrained with optional admin-controlled background) */
 .brand-intro-strip {
+  position: relative;
   background-color: var(--color-surface-subtle);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--space-md) var(--space-lg);
@@ -564,6 +568,67 @@ img {
   justify-content: space-between;
   gap: var(--space-md);
   flex-wrap: wrap;
+  overflow: hidden;
+  transition: background-image 0.3s ease;
+}
+
+/* Semi-transparent luxury overlay when hero background image is active */
+.brand-intro-strip.has-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.93) 0%, rgba(255, 255, 255, 0.88) 55%, rgba(255, 255, 255, 0.78) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brand-intro-content,
+.brand-channels-row {
+  position: relative;
+  z-index: 2;
+}
+
+/* Cloudflare R2 Upload Cluster */
+.input-upload-cluster {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  width: 100%;
+}
+
+.input-upload-cluster .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.upload-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  transition: all 0.15s ease;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.upload-trigger-btn:hover {
+  background-color: var(--color-primary-tint);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.upload-trigger-btn .material-symbols-outlined {
+  font-size: 17px;
+  color: var(--color-primary);
 }
 
 .brand-intro-content {

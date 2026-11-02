@@ -396,16 +396,20 @@ async function initDb() {
       delivery_notice VARCHAR(255) DEFAULT 'Delivery Across Ghana',
       store_location VARCHAR(255) DEFAULT 'Accra, Ghana',
       opening_hours VARCHAR(255) DEFAULT 'Mon - Sat: 8:00 AM - 7:00 PM',
+      hero_image_url TEXT DEFAULT 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&auto=format&fit=crop&q=80',
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
   `;
   await pool.query(createStoreInfoTableQuery);
 
+  // Ensure hero_image_url column exists for existing tables
+  await pool.query(`ALTER TABLE store_info ADD COLUMN IF NOT EXISTS hero_image_url TEXT DEFAULT 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&auto=format&fit=crop&q=80';`);
+
   const storeInfoCountRes = await pool.query('SELECT COUNT(*) FROM store_info');
   if (parseInt(storeInfoCountRes.rows[0].count, 10) === 0) {
     await pool.query(`
-      INSERT INTO store_info (id, whatsapp_number, display_phone, snapchat_handle, hero_eyebrow, hero_serif, hero_target, hero_subtext, delivery_notice, store_location, opening_hours)
-      VALUES ('main', '233595427789', '059 542 7789', 'comfys_decorate', 'Do you need a', 'decorative accessory', 'for your Home, Kitchen or Office?', 'Comfy''s Decor Accessories has got exactly what you need. Browse our curated sculptures, ambient lighting, vases, and interior styling accents.', 'Delivery Across Ghana', 'Accra, Ghana', 'Mon - Sat: 8:00 AM - 7:00 PM')
+      INSERT INTO store_info (id, whatsapp_number, display_phone, snapchat_handle, hero_eyebrow, hero_serif, hero_target, hero_subtext, delivery_notice, store_location, opening_hours, hero_image_url)
+      VALUES ('main', '233595427789', '059 542 7789', 'comfys_decorate', 'Do you need a', 'decorative accessory', 'for your Home, Kitchen or Office?', 'Comfy''s Decor Accessories has got exactly what you need. Browse our curated sculptures, ambient lighting, vases, and interior styling accents.', 'Delivery Across Ghana', 'Accra, Ghana', 'Mon - Sat: 8:00 AM - 7:00 PM', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&auto=format&fit=crop&q=80')
     `);
     console.log("Successfully seeded default store info and contacts into Neon PostgreSQL.");
   }
@@ -425,6 +429,7 @@ function formatRowToStoreInfo(row) {
     deliveryNotice: row.delivery_notice,
     storeLocation: row.store_location,
     openingHours: row.opening_hours,
+    heroImageUrl: row.hero_image_url || '',
     updatedAt: row.updated_at
   };
 }
@@ -447,6 +452,7 @@ async function updateStoreInfo(info) {
       delivery_notice = COALESCE($8, delivery_notice),
       store_location = COALESCE($9, store_location),
       opening_hours = COALESCE($10, opening_hours),
+      hero_image_url = COALESCE($11, hero_image_url),
       updated_at = NOW()
     WHERE id = 'main'
     RETURNING *`,
@@ -460,7 +466,8 @@ async function updateStoreInfo(info) {
       info.heroSubtext,
       info.deliveryNotice,
       info.storeLocation,
-      info.openingHours
+      info.openingHours,
+      info.heroImageUrl
     ]
   );
   return res.rows.length ? formatRowToStoreInfo(res.rows[0]) : null;

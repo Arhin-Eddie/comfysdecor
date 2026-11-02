@@ -29,7 +29,7 @@
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch (_) {}
-    return null;
+    return BUILTIN_FLYER_PRODUCTS;
   }
 
   function setCachedProducts(products) {
@@ -37,6 +37,240 @@
       localStorage.setItem(STORAGE_KEY_CACHE, JSON.stringify(products));
     } catch (_) {}
   }
+
+  // Built-in Signature Flyer Products Baseline Fallback (Offline & file:// resilient)
+  const BUILTIN_FLYER_PRODUCTS = [
+    {
+      id: 'cda-001',
+      sku: 'CDA-LGT-001',
+      title: 'Illuminated Astronaut Figurine Moon Lamp',
+      category: 'Decorative Lighting',
+      priceGhs: 690,
+      stockQty: 5,
+      published: true,
+      origin: 'Gold Helmet & Textured Moon Sphere',
+      material: 'Composite stone resin, warm LED orb with rechargeable base',
+      dimensions: '28 × 16 × 14 cm',
+      weight: '1.5 kg',
+      guild: 'Living Room Console, Bedside Table or Creative Desk',
+      description: "Comfy's signature astronaut figurine sitting upon a cratered moon orb, equipped with stylish gold headphones and cradling an illuminated warm-glowing sphere. A captivating contemporary conversation piece for modern home and office interiors.",
+      symbolism: 'Warm ambient glow with touch-dimmer switch. Recharge via included USB cable. Dust with a soft dry cloth.',
+      images: [
+        'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-002',
+      sku: 'CDA-SCU-002',
+      title: 'Majestic Rearing Stallion Sculptures (Pair in White & Black Gold)',
+      category: 'Sculptures & Figurines',
+      priceGhs: 780,
+      stockQty: 4,
+      published: true,
+      origin: 'Glazed White & Onyx Black with Gold Accents',
+      material: 'Fine ceramic composite, hand-applied gold leaf detail',
+      dimensions: '32 × 18 × 10 cm each',
+      weight: '2.2 kg (Pair)',
+      guild: 'Living Room Credenza, Bookshelf or Office Suite',
+      description: 'Dynamic duo of rearing equestrian statues featuring one pristine white stallion and one midnight black stallion, accented with lustrous gold manes and hooves. Conveys grace, strength, and modern architectural elegance.',
+      symbolism: 'Wipe clean with dry microfiber cloth. Display as a balanced pair or on opposing sides of a console.',
+      images: [
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-003',
+      sku: 'CDA-LGT-003',
+      title: 'Tripod Crystal Orb Decorative Lamps (Set of 3)',
+      category: 'Decorative Lighting',
+      priceGhs: 850,
+      stockQty: 3,
+      published: true,
+      origin: 'Polished Gold & Crystalline Glass',
+      material: 'Spun electroplated brass tripod stands, bubble crystal globes',
+      dimensions: 'Small: 18cm, Med: 24cm, Large: 30cm',
+      weight: '2.8 kg (Set)',
+      guild: 'Coffee Table, Dining Room Buffet or Display Niche',
+      description: 'Trio of graduated architectural gold tripod stands crowning luminous bubble crystal spheres. Casts an enchanting prism of warm ambient light across dining and living spaces.',
+      symbolism: 'Includes low-voltage warm LED elements with inline switch. Gently wipe glass with lint-free cloth.',
+      images: [
+        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-004',
+      sku: 'CDA-FIG-004',
+      title: 'Nordic Stag Deer Figurine with Gold Antlers & Solar Disc',
+      category: 'Sculptures & Figurines',
+      priceGhs: 520,
+      stockQty: 6,
+      published: true,
+      origin: 'Matte Chalk White & Polished Gold',
+      material: 'High-density composite, polished gold electroplated antlers',
+      dimensions: '26 × 20 × 11 cm',
+      weight: '950 g',
+      guild: 'Entryway Console, Coffee Table or Executive Desk',
+      description: 'Serene resting deer figurine in silky matte white, crowned with sculptural gold antlers and supporting an illuminated reflective disc. Evokes tranquility and sophisticated nature-inspired modern styling.',
+      symbolism: 'Equipped with protective velvet pads under base. Wipe with clean cloth.',
+      images: [
+        'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-005',
+      sku: 'CDA-KTC-005',
+      title: 'Kitchen Countertop Ceramic Canister & Utensil Styling Set',
+      category: 'Kitchen Accessories',
+      priceGhs: 480,
+      stockQty: 5,
+      published: true,
+      origin: 'Terracotta, Warm Oatmeal & Natural Wood',
+      material: 'Stoneware ceramics with food-grade acacia wood lids and tools',
+      dimensions: 'Canisters: 14 × 10 cm, Crock: 18 × 12 cm',
+      weight: '2.4 kg (Complete Set)',
+      guild: 'Kitchen Island, Dining Countertop or Open Shelving',
+      description: 'Aesthetic warm neutral kitchen countertop grouping including airtight ceramic storage jars, fluted utensil crock, and hand-carved wooden culinary spoons. Brings organic modern warmth to everyday cooking spaces.',
+      symbolism: 'Ceramic bodies are dishwasher safe. Hand-wash acacia wood lids and dry immediately.',
+      images: [
+        'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-006',
+      sku: 'CDA-VAS-006',
+      title: 'Fluted Ceramic Tabletop Vase (Warm Cream & Matte Glaze)',
+      category: 'Decorative Vases',
+      priceGhs: 380,
+      stockQty: 6,
+      published: true,
+      origin: 'Warm Cream / Matte Finish',
+      material: 'Kiln-fired earthenware, ribbed tactile texture',
+      dimensions: '25 × 14 × 14 cm',
+      weight: '1.1 kg',
+      guild: 'Dining Table, Living Room Coffee Table or Sideboard',
+      description: 'Fluted cylindrical sculptural vase in a gentle warm cream tone with subtle mineral speckling. Ideal for styling with dried pampas grass, seasonal botanicals, or fresh florals.',
+      symbolism: 'Water-tight interior glazing. Clean gently with mild soap and lukewarm water.',
+      images: [
+        'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-007',
+      sku: 'CDA-TAB-007',
+      title: 'Sculptural Continuous Metal Knot Object (Polished Gold)',
+      category: 'Tabletop Accessories',
+      priceGhs: 290,
+      stockQty: 8,
+      published: true,
+      origin: 'High-Gloss Polished Gold',
+      material: 'Cast aluminum alloy with lustrous electroplated gold finish',
+      dimensions: '16 × 16 × 16 cm',
+      weight: '820 g',
+      guild: 'Coffee Table Books, Media Credenza or Office Shelf',
+      description: 'Captivating architectural metal knot sculpture with fluid, looping curves. An effortlessly chic decorative accent commonly featured on interior design coffee tables.',
+      symbolism: 'Wipe with microfiber cloth to maintain mirror reflection. Base features discreet protective felt.',
+      images: [
+        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-008',
+      sku: 'CDA-OFF-008',
+      title: 'Heavyweight Marble Desk Organizer Tray with Gold Handles',
+      category: 'Office Décor',
+      priceGhs: 450,
+      stockQty: 5,
+      published: true,
+      origin: 'White Veined Marble & Brushed Gold',
+      material: 'Genuine natural marble slab with brushed brass hardware',
+      dimensions: '30 × 20 × 4 cm',
+      weight: '2.6 kg',
+      guild: 'Executive Office Desk, Vanity or Console Catchall',
+      description: 'Substantial solid marble catchall tray with rich grey veining and brushed gold ergonomic side handles. Elevates executive offices, styling pens, timepieces, or perfumes with timeless luxury.',
+      symbolism: 'Natural stone variation ensures each tray is unique. Sealed against light moisture.',
+      images: [
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-009',
+      sku: 'CDA-KTC-009',
+      title: 'Hammered Brass Centerpiece & Fruit Bowl',
+      category: 'Kitchen Accessories',
+      priceGhs: 490,
+      stockQty: 5,
+      published: true,
+      origin: 'Hand-Hammered Warm Gold',
+      material: 'Solid brass with clear food-safe protective lacquer',
+      dimensions: '28 × 28 × 12 cm',
+      weight: '1.4 kg',
+      guild: 'Dining Room Table, Kitchen Island or Breakfast Nook',
+      description: 'Shallow footed brass serving centerpiece displaying authentic dimpled hammer marks that dance in ambient light. Functional as an artisanal fruit display or decorative empty bowl.',
+      symbolism: 'Treated to resist tarnishing. Hand wash only; do not soak or scrub with abrasives.',
+      images: [
+        'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-010',
+      sku: 'CDA-WAL-010',
+      title: 'Architectural Geometric Arch Relief Plaque (Olive & Oatmeal)',
+      category: 'Wall Décor',
+      priceGhs: 720,
+      stockQty: 3,
+      published: true,
+      origin: 'Muted Olive & Warm Oatmeal',
+      material: 'Plaster composite relief on framed oak panel',
+      dimensions: '60 × 40 × 4 cm',
+      weight: '3.1 kg',
+      guild: 'Entryway Gallery Wall, Living Room Sofa Wall or Office',
+      description: 'Tactile layered archway bas-relief artwork finished in soothing muted olive and warm oatmeal tones. Adds textural depth and contemporary calmness to modern walls.',
+      symbolism: 'Equipped with heavy-duty recessed hanging brackets for secure mounting.',
+      images: [
+        'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-011',
+      sku: 'CDA-OFF-011',
+      title: 'Minimalist The Thinker Figurine (Matte Charcoal & Gold)',
+      category: 'Sculptures & Figurines',
+      priceGhs: 350,
+      stockQty: 7,
+      published: true,
+      origin: 'Matte Charcoal / Gold Leaf Detail',
+      material: 'Cast polyresin with matte velvet-soft coating',
+      dimensions: '24 × 13 × 10 cm',
+      weight: '680 g',
+      guild: 'Office Bookshelf, Study Desk or Library Nook',
+      description: 'Modern abstracted interpretation of the contemplative thinker posture in bold matte charcoal, highlighted with delicate gold leaf along the brow. A cerebral statement for workstations.',
+      symbolism: 'Dust with soft makeup brush or dry cloth. Padded scratch-resistant footing.',
+      images: [
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'cda-012',
+      sku: 'CDA-VAS-012',
+      title: 'Circular Modernist Donut Ring Vase (Chalk White Ceramic)',
+      category: 'Decorative Vases',
+      priceGhs: 320,
+      stockQty: 8,
+      published: true,
+      origin: 'Matte Chalk White',
+      material: 'Ceramic earthenware, unglazed porous exterior',
+      dimensions: '22 × 20 × 6 cm',
+      weight: '750 g',
+      guild: 'Console Table, Floating Shelf or Mantelpiece',
+      description: 'Trending donut-ring geometric hollow vase with an open center. Beautiful whether styled with solitary dried florals or displayed as a standalone architectural art piece.',
+      symbolism: 'Internally sealed for water retention. Wipe exterior gently with a clean dry cloth.',
+      images: [
+        'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?w=800&auto=format&fit=crop&q=80'
+      ]
+    }
+  ];
 
   // App State — Authoritatively fetched and synchronized with Neon PostgreSQL
   const state = {
@@ -51,7 +285,8 @@
       heroSubtext: "Comfy's Decor Accessories has got exactly what you need. Browse our curated sculptures, ambient lighting, vases, and interior styling accents.",
       deliveryNotice: 'Delivery Across Ghana',
       storeLocation: 'Accra, Ghana',
-      openingHours: 'Mon - Sat: 8:00 AM - 7:00 PM'
+      openingHours: 'Mon - Sat: 8:00 AM - 7:00 PM',
+      heroImageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&auto=format&fit=crop&q=80'
     },
     viewMode: 'public', // 'public' | 'admin'
     isAdminAuthenticated: false,
@@ -74,6 +309,7 @@
     viewStorefrontBtn: document.getElementById('viewStorefrontBtn'),
     adminLogoutBtn: document.getElementById('adminLogoutBtn'),
     // Dynamic Store Info Elements
+    brandIntroStrip: document.getElementById('brandIntroStrip'),
     headerWaLink: document.getElementById('headerWaLink'),
     headerWaLabel: document.getElementById('headerWaLabel'),
     heroEyebrow: document.getElementById('heroEyebrow'),
@@ -108,6 +344,9 @@
     settingsHeroSerif: document.getElementById('settingsHeroSerif'),
     settingsHeroTarget: document.getElementById('settingsHeroTarget'),
     settingsHeroSubtext: document.getElementById('settingsHeroSubtext'),
+    settingsHeroImage: document.getElementById('settingsHeroImage'),
+    settingsHeroImageFile: document.getElementById('settingsHeroImageFile'),
+    heroUploadBtnText: document.getElementById('heroUploadBtnText'),
     saveSettingsBtn: document.getElementById('saveSettingsBtn'),
     saveSettingsBtnText: document.getElementById('saveSettingsBtnText'),
     // Admin Login Modal Elements
@@ -197,6 +436,8 @@
     formWeight: document.getElementById('formWeight'),
     formGuild: document.getElementById('formGuild'),
     formImageUrl: document.getElementById('formImageUrl'),
+    productImageFile: document.getElementById('productImageFile'),
+    productUploadBtnText: document.getElementById('productUploadBtnText'),
     formDescription: document.getElementById('formDescription'),
     formSymbolism: document.getElementById('formSymbolism'),
     formPublished: document.getElementById('formPublished'),
@@ -253,7 +494,7 @@
       const res = await fetch('/api/products');
       if (res.ok) {
         const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
           state.records = json.data;
           setCachedProducts(json.data);
           renderAll();
@@ -262,7 +503,14 @@
       }
       console.warn('Neon DB returned non-OK response:', res.status);
     } catch (err) {
-      console.warn('Network issue reaching Neon DB:', err);
+      console.warn('Network issue reaching Neon DB (using resilient fallback):', err);
+    }
+
+    // Resilient fallback: ensure catalog is never empty even offline or via file://
+    if (!state.records || state.records.length === 0) {
+      state.records = [...BUILTIN_FLYER_PRODUCTS];
+      setCachedProducts(state.records);
+      renderAll();
     }
   }
 
@@ -317,6 +565,17 @@
     if (els.footerLocationHours) {
       els.footerLocationHours.innerHTML = `<strong>Location:</strong> ${info.storeLocation} • <strong>Hours:</strong> ${info.openingHours}`;
     }
+
+    // Dynamic Hero Background Image (Controlled by Admin via Cloudflare R2 / URL)
+    if (els.brandIntroStrip) {
+      if (info.heroImageUrl && info.heroImageUrl.trim()) {
+        els.brandIntroStrip.style.backgroundImage = `url("${info.heroImageUrl.trim()}")`;
+        els.brandIntroStrip.classList.add('has-bg');
+      } else {
+        els.brandIntroStrip.style.backgroundImage = 'none';
+        els.brandIntroStrip.classList.remove('has-bg');
+      }
+    }
   }
 
   function openSettingsModal() {
@@ -335,6 +594,7 @@
     if (els.settingsHeroSerif) els.settingsHeroSerif.value = info.heroSerif || '';
     if (els.settingsHeroTarget) els.settingsHeroTarget.value = info.heroTarget || '';
     if (els.settingsHeroSubtext) els.settingsHeroSubtext.value = info.heroSubtext || '';
+    if (els.settingsHeroImage) els.settingsHeroImage.value = info.heroImageUrl || '';
 
     if (els.settingsModal) els.settingsModal.classList.remove('hidden');
     if (els.settingsModalBackdrop) els.settingsModalBackdrop.classList.remove('hidden');
@@ -367,7 +627,8 @@
       heroEyebrow: els.settingsHeroEyebrow.value.trim(),
       heroSerif: els.settingsHeroSerif.value.trim(),
       heroTarget: els.settingsHeroTarget.value.trim(),
-      heroSubtext: els.settingsHeroSubtext.value.trim()
+      heroSubtext: els.settingsHeroSubtext.value.trim(),
+      heroImageUrl: els.settingsHeroImage ? els.settingsHeroImage.value.trim() : ''
     };
 
     els.saveSettingsBtn.disabled = true;
@@ -1337,11 +1598,75 @@
   }
 
   /**
+   * CLOUDFLARE R2 & FILE STORAGE ENGINE
+   */
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadImageViaR2(file, targetInputEl, buttonLabelEl) {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please choose a valid image file (JPEG, PNG, WEBP, AVIF).');
+      return;
+    }
+
+    if (!state.isAdminAuthenticated) {
+      openLoginModal('Please log in as admin to upload images to Cloudflare R2.');
+      return;
+    }
+
+    const originalText = buttonLabelEl ? buttonLabelEl.textContent : '';
+    if (buttonLabelEl) buttonLabelEl.textContent = 'Uploading...';
+
+    try {
+      const base64Data = await readFileAsBase64(file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          imageBase64: base64Data,
+          filename: file.name,
+          contentType: file.type
+        })
+      });
+
+      if (res.status === 401) {
+        handleAuthExpired();
+        return;
+      }
+
+      const json = await res.json();
+      if (res.ok && json.success && json.data && json.data.url) {
+        targetInputEl.value = json.data.url;
+        if (buttonLabelEl) {
+          buttonLabelEl.textContent = json.data.storage === 'cloudflare-r2' ? 'Saved to R2!' : 'Uploaded!';
+          setTimeout(() => { if (buttonLabelEl) buttonLabelEl.textContent = originalText; }, 2500);
+        }
+      } else {
+        alert('Upload error: ' + (json.error || 'Server could not process image'));
+        if (buttonLabelEl) buttonLabelEl.textContent = originalText;
+      }
+    } catch (err) {
+      alert('Upload connection error: ' + err.message);
+      if (buttonLabelEl) buttonLabelEl.textContent = originalText;
+    }
+  }
+
+  /**
    * RESET TO SIGNATURE FLYER CATALOG IN NEON DB
    */
   async function resetSampleDemo() {
     if (!state.isAdminAuthenticated) {
-      openLoginModal('Please log in as admin to reset catalog.');
+      // If public visitor lands on empty state (e.g. offline or file://), instantly load signature items
+      state.records = [...BUILTIN_FLYER_PRODUCTS];
+      setCachedProducts(state.records);
+      renderAll();
       return;
     }
     const confirmed = window.confirm('Reset catalog in Neon PostgreSQL to the 12 signature flyer items?');
@@ -1366,7 +1691,11 @@
         alert('Could not reset Neon database: ' + (data.error || 'Server error'));
       }
     } catch (err) {
-      alert('Error connecting to Neon database: ' + err.message);
+      console.warn('Neon connection error, restoring built-in signature catalog locally:', err);
+      state.records = [...BUILTIN_FLYER_PRODUCTS];
+      setCachedProducts(state.records);
+      renderAll();
+      alert(`Signature catalog loaded locally with ${state.records.length} items.`);
     }
   }
 
@@ -1583,6 +1912,23 @@
       state.adminSearchQuery = e.target.value;
       renderAdminRegistry();
     });
+
+    // Cloudflare R2 / Storage Image Upload Event Listeners
+    if (els.productImageFile) {
+      els.productImageFile.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) uploadImageViaR2(file, els.formImageUrl, els.productUploadBtnText);
+        e.target.value = '';
+      });
+    }
+
+    if (els.settingsHeroImageFile) {
+      els.settingsHeroImageFile.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) uploadImageViaR2(file, els.settingsHeroImage, els.heroUploadBtnText);
+        e.target.value = '';
+      });
+    }
   }
 
   // Utilities

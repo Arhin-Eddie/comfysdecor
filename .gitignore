@@ -34,3 +34,5 @@ desktop.ini
 *.pid.lock
 tmp/
 temp/
+assets/uploads/
+!assets/uploads/.gitkeep

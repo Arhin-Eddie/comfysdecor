@@ -77,8 +77,8 @@
     <!-- 1. PUBLIC STOREFRONT VIEW -->
     <div id="publicStorefrontSection" class="view-panel active">
 
-      <!-- Compact Brand Intro Strip (Directly aligned with official flyer) -->
-      <section class="brand-intro-strip" aria-label="Brand introduction">
+      <!-- Compact Brand Intro Strip (Directly aligned with official flyer, supports custom admin background) -->
+      <section class="brand-intro-strip" id="brandIntroStrip" aria-label="Brand introduction">
         <div class="brand-intro-content">
           <span class="brand-eyebrow" id="heroEyebrow">Do you need a</span>
           <h1 class="brand-hero-title">
@@ -494,11 +494,18 @@
           <input type="text" id="formGuild" class="form-input" placeholder="e.g. Living room console, office desk, entryway" />
         </div>
 
-        <!-- Primary Image URL -->
+        <!-- Primary Image URL with Cloudflare R2 Upload Button -->
         <div class="form-field col-span-2">
           <label for="formImageUrl" class="form-label">Primary Image URL *</label>
-          <input type="url" id="formImageUrl" class="form-input font-mono text-sm" placeholder="https://..." required />
-          <span class="form-hint">Direct link to high-resolution photo (clean styling framing recommended).</span>
+          <div class="input-upload-cluster">
+            <input type="url" id="formImageUrl" class="form-input font-mono text-sm" placeholder="https://... (or upload directly)" required />
+            <label class="btn-secondary upload-trigger-btn" title="Upload directly to Cloudflare R2">
+              <span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span>
+              <span id="productUploadBtnText">Upload Image</span>
+              <input type="file" id="productImageFile" accept="image/*" class="sr-only" />
+            </label>
+          </div>
+          <span class="form-hint">Enter direct image link or click Upload Image (uploads to Cloudflare R2 storage bucket).</span>
           <span class="form-error hidden" id="errImageUrl">A valid image URL is required.</span>
         </div>
 
@@ -679,6 +686,20 @@
         <div class="form-field col-span-2">
           <label for="settingsHeroEyebrow" class="form-label">Hero Banner Eyebrow</label>
           <input type="text" id="settingsHeroEyebrow" class="form-input" placeholder="e.g. Do you need a" />
+        </div>
+
+        <!-- Hero Background Image (Controlled by Admin via Cloudflare R2 / URL) -->
+        <div class="form-field col-span-2">
+          <label for="settingsHeroImage" class="form-label">Hero Banner Background Image URL</label>
+          <div class="input-upload-cluster">
+            <input type="url" id="settingsHeroImage" class="form-input font-mono text-sm" placeholder="https://... (or upload to R2)" />
+            <label class="btn-secondary upload-trigger-btn" title="Upload directly to Cloudflare R2">
+              <span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span>
+              <span id="heroUploadBtnText">Upload Banner</span>
+              <input type="file" id="settingsHeroImageFile" accept="image/*" class="sr-only" />
+            </label>
+          </div>
+          <span class="field-hint">High-resolution interior photography displayed behind the hero banner with a soft luxury overlay. Supports Cloudflare R2 or external CDN links.</span>
         </div>
 
         <!-- Hero Serif Accent -->

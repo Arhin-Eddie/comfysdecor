@@ -98,6 +98,13 @@ PORT=3000
 # Administrator credentials & token secret
 ADMIN_PASSWORD=comfy2026
 AUTH_SECRET=your_super_secret_signing_key_here
+
+# (Optional) Cloudflare R2 Object Storage for Images & Banner CDN
+R2_ACCOUNT_ID=your_cloudflare_account_id
+R2_ACCESS_KEY_ID=your_r2_access_key_id
+R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
+R2_BUCKET_NAME=comfys-decor
+R2_PUBLIC_URL=https://pub-your_bucket_id.r2.dev
 ```
 
 ### 4. Run the application
@@ -108,6 +115,16 @@ npm start
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 > On initial startup, `db.js` will automatically create the required database tables (`products`, `admins`, `store_info`) and seed the 12 signature promotional flyer products if the tables are empty.
+
+---
+
+## ☁️ Cloudflare R2 Image Storage
+
+The application is fully prepared for **Cloudflare R2** (S3-compatible, zero-egress fee object storage):
+
+- **Product Images & Hero Banners**: Store admins can upload images directly from the browser within the Add/Edit Product Modal and Store Settings Modal.
+- **Edge CDN Delivery**: Uploads are delivered instantly via Cloudflare's global edge network using your R2 public bucket URL or custom domain.
+- **Resilient Fallback**: If R2 credentials are not configured in `.env`, the app automatically falls back to local storage (`/assets/uploads`), ensuring zero crashes during local development.
 
 ---
 
