@@ -441,7 +441,9 @@
     formDescription: document.getElementById('formDescription'),
     formSymbolism: document.getElementById('formSymbolism'),
     formPublished: document.getElementById('formPublished'),
+    saveArtifactBtn: document.getElementById('saveArtifactBtn'),
     saveBtnText: document.getElementById('saveBtnText'),
+    loginModal: document.getElementById('adminLoginModal'),
     currentYear: document.getElementById('currentYear')
   };
 
@@ -1598,37 +1600,57 @@
     const desc = els.formDescription.value.trim();
 
     let hasError = false;
+    let firstErrorField = null;
 
     if (!title) {
       document.getElementById('errTitle').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formTitle;
     }
     if (!sku) {
       document.getElementById('errSku').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formSku;
     }
     if (isNaN(price) || price < 0) {
       document.getElementById('errPrice').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formPrice;
     }
     if (isNaN(stock) || stock < 0) {
       document.getElementById('errStock').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formStock;
     }
     if (!origin) {
       document.getElementById('errOrigin').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formOrigin;
     }
     if (!imageUrl) {
       document.getElementById('errImageUrl').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formImageUrl;
     }
     if (!desc) {
       document.getElementById('errDesc').classList.remove('hidden');
       hasError = true;
+      if (!firstErrorField) firstErrorField = els.formDescription;
     }
 
-    if (hasError) return;
+    if (hasError) {
+      showToast('Please fill in the required fields marked in red.', 'error');
+      if (els.editorModal) {
+        els.editorModal.classList.remove('shake');
+        void els.editorModal.offsetWidth;
+        els.editorModal.classList.add('shake');
+      }
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+      }
+      return;
+    }
 
     if (!state.isAdminAuthenticated) {
       closeModal();
@@ -1639,8 +1661,8 @@
     const id = els.editArtifactId.value;
     const isEdit = Boolean(id);
 
-    els.saveArtifactBtn.disabled = true;
-    els.saveBtnText.textContent = isEdit ? 'Updating Neon DB...' : 'Saving to Neon DB...';
+    if (els.saveArtifactBtn) els.saveArtifactBtn.disabled = true;
+    if (els.saveBtnText) els.saveBtnText.textContent = isEdit ? 'Updating Neon DB...' : 'Saving to Neon DB...';
 
     const payload = {
       ...(isEdit ? { id } : {}),
@@ -1699,8 +1721,8 @@
     } catch (err) {
       showToast('Network or database connection error: ' + err.message, 'error');
     } finally {
-      els.saveArtifactBtn.disabled = false;
-      els.saveBtnText.textContent = isEdit ? 'Save Changes' : 'Save Item';
+      if (els.saveArtifactBtn) els.saveArtifactBtn.disabled = false;
+      if (els.saveBtnText) els.saveBtnText.textContent = isEdit ? 'Save Changes' : 'Save Item';
     }
   }
 
