@@ -2348,6 +2348,200 @@ img {
 }
 
 /* ==========================================================================
+   MOBILE-FIRST ADMIN WORKSPACE & MODAL RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 640px) {
+  .editor-modal {
+    width: calc(100% - 16px);
+    max-width: none;
+    max-height: 94vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .modal-header {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .modal-heading {
+    font-size: 1.05rem;
+  }
+
+  .modal-form {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .col-span-2 {
+    grid-column: span 1;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px !important; /* Prevents iOS auto-zoom on focus */
+    min-height: 42px;
+    padding: 9px 12px;
+    border-radius: var(--radius-xs);
+  }
+
+  .form-textarea {
+    min-height: 72px;
+  }
+
+  .modal-footer {
+    padding: var(--space-sm);
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .modal-footer button {
+    width: 100%;
+    height: 44px;
+    justify-content: center;
+    font-size: 0.88rem;
+  }
+
+  /* Admin Header & Toolbar Mobile Layout */
+  .admin-topbar {
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+  }
+
+  .admin-title-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .admin-title {
+    font-size: 1.18rem;
+  }
+
+  .admin-topbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .admin-topbar-actions #openAddModalBtn {
+    grid-column: span 2;
+    order: -1; /* Highlight Add New Item at the very top */
+    height: 44px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .admin-topbar-actions .btn-secondary {
+    justify-content: center;
+    font-size: 0.78rem;
+    padding: 8px 6px;
+    height: 38px;
+  }
+
+  .admin-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .admin-search-wrap {
+    width: 100%;
+  }
+
+  .admin-search-input {
+    font-size: 16px !important; /* Prevents iOS auto-zoom */
+    height: 38px;
+  }
+
+  .admin-filter-tabs {
+    overflow-x: auto;
+    width: 100%;
+    padding: 4px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-tab {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    font-size: 0.76rem;
+  }
+
+  /* Admin Table Touch Responsiveness */
+  .admin-table-container {
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-xs);
+  }
+
+  .inventory-table {
+    min-width: 660px; /* Guarantees table columns remain legible on horizontal swipe */
+  }
+
+  .stepper-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .stepper-val {
+    min-width: 32px;
+    font-size: 0.85rem;
+  }
+
+  .tbl-action-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tbl-action-btn .material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  /* Cloudflare R2 Upload Cluster on Mobile */
+  .input-upload-cluster {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .upload-trigger-btn {
+    width: 100%;
+    height: 40px;
+    justify-content: center;
+  }
+
+  /* Admin Login Modal Mobile */
+  .login-modal {
+    width: calc(100% - 20px);
+    max-width: none;
+  }
+
+  .login-modal-header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .login-card {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .login-card .form-input {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  .login-card .btn-primary {
+    height: 46px;
+    font-size: 0.92rem;
+  }
+}
+
+/* ==========================================================================
    CURATORIAL FOOTER (Restrained & Architectural)
    ========================================================================== */
 .catalog-footer {
