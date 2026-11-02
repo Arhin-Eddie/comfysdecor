@@ -1231,6 +1231,7 @@
       script.type = 'application/ld+json';
       document.head.appendChild(script);
     }
+    const siteOrigin = window.location.origin;
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
@@ -1243,7 +1244,7 @@
           '@type': 'Product',
           'name': it.title,
           'sku': it.sku,
-          'image': (it.images && it.images[0]) ? it.images[0] : 'https://comfysdecor.com/assets/comfys_flyer.png',
+          'image': (it.images && it.images[0]) ? it.images[0] : `${siteOrigin}/assets/comfys_flyer.png`,
           'description': it.description || 'Decorative accessory for home, kitchen and office in Ghana.',
           'brand': {
             '@type': 'Brand',
@@ -1270,12 +1271,13 @@
       script.type = 'application/ld+json';
       document.head.appendChild(script);
     }
+    const siteOrigin = window.location.origin;
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       'name': item.title,
       'sku': item.sku,
-      'image': (item.images && item.images.length) ? item.images : ['https://comfysdecor.com/assets/comfys_flyer.png'],
+      'image': (item.images && item.images.length) ? item.images : [`${siteOrigin}/assets/comfys_flyer.png`],
       'description': item.description || 'Modern decorative accessory for interior styling in Ghana.',
       'category': item.category,
       'brand': {
@@ -1284,7 +1286,7 @@
       },
       'offers': {
         '@type': 'Offer',
-        'url': `https://comfysdecor.com/#product-${item.id}`,
+        'url': `${siteOrigin}/#product-${item.id}`,
         'priceCurrency': 'GHS',
         'price': item.priceGhs,
         'itemCondition': 'https://schema.org/NewCondition',

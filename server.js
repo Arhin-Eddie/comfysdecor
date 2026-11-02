@@ -115,9 +115,9 @@ function escapeXml(unsafe) {
 
 app.get('/sitemap.xml', async (req, res) => {
   try {
-    const host = req.get('host') || 'comfysdecor.com';
     const proto = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
-    const baseUrl = `${proto}://${host}`;
+    const host = req.get('host') || 'comfysdecor.vercel.app';
+    const baseUrl = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/$/, '') : `${proto}://${host}`;
     const products = await db.getAllProducts();
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
