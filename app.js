@@ -298,7 +298,9 @@
     density: 'grid', // 'grid' | 'dense' | 'list'
     adminStatusFilter: 'ALL',
     adminSearchQuery: '',
-    activeArtifact: null
+    activeArtifact: null,
+    editingProductImages: [],
+    isUploadingImages: false
   };
 
   // DOM Elements Cache
@@ -435,9 +437,11 @@
     formDimensions: document.getElementById('formDimensions'),
     formWeight: document.getElementById('formWeight'),
     formGuild: document.getElementById('formGuild'),
-    formImageUrl: document.getElementById('formImageUrl'),
+    productImagesGrid: document.getElementById('productImagesGrid'),
+    productDropzone: document.getElementById('productDropzone'),
     productImageFile: document.getElementById('productImageFile'),
-    productUploadBtnText: document.getElementById('productUploadBtnText'),
+    formAddImageUrlInput: document.getElementById('formAddImageUrlInput'),
+    addImageUrlBtn: document.getElementById('addImageUrlBtn'),
     formDescription: document.getElementById('formDescription'),
     formSymbolism: document.getElementById('formSymbolism'),
     formPublished: document.getElementById('formPublished'),
@@ -1398,28 +1402,51 @@
     const msg = encodeURIComponent(`Hello Comfy's Decor Accessories, I would like to order: "${item.title}" (SKU: ${item.sku}) ${priceText}.`);
     els.drawerInquireLink.href = `https://wa.me/${waNumber}?text=${msg}`;
 
-    // Show Drawer & Lock document background scroll
+    // Smooth Reveal with 60fps hardware accelerated slide-in
+    clearTimeout(drawerCloseTimeout);
     els.drawerBackdrop.classList.remove('hidden');
     els.artifactDrawer.classList.remove('hidden');
+    // Force browser reflow so transition begins from right edge
+    void els.artifactDrawer.offsetWidth;
+    els.drawerBackdrop.classList.add('active');
+    els.artifactDrawer.classList.add('active');
+
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
 
   function setDrawerImage(url, index, total) {
-    els.drawerMainImage.src = url;
-    els.drawerMainImage.alt = state.activeArtifact ? state.activeArtifact.title : 'Product Image';
+    if (els.drawerMainImage.src !== url) {
+      els.drawerMainImage.style.opacity = '0.35';
+      els.drawerMainImage.style.transform = 'scale(0.985)';
+      setTimeout(() => {
+        els.drawerMainImage.src = url;
+        els.drawerMainImage.alt = state.activeArtifact ? state.activeArtifact.title : 'Product Image';
+        els.drawerMainImage.style.opacity = '1';
+        els.drawerMainImage.style.transform = 'scale(1)';
+      }, 120);
+    } else {
+      els.drawerMainImage.alt = state.activeArtifact ? state.activeArtifact.title : 'Product Image';
+    }
     els.drawerGalleryCounter.textContent = `${index + 1} / ${total}`;
   }
 
+  let drawerCloseTimeout = null;
   function closeArtifactDrawer() {
-    els.drawerBackdrop.classList.add('hidden');
-    els.artifactDrawer.classList.add('hidden');
+    clearTimeout(drawerCloseTimeout);
+    els.drawerBackdrop.classList.remove('active');
+    els.artifactDrawer.classList.remove('active');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     state.activeArtifact = null;
 
     const prodScript = document.getElementById('productSchemaJsonLd');
     if (prodScript) prodScript.remove();
+
+    drawerCloseTimeout = setTimeout(() => {
+      els.drawerBackdrop.classList.add('hidden');
+      els.artifactDrawer.classList.add('hidden');
+    }, 380);
   }
 
   /**
@@ -1526,6 +1553,132 @@
   }
 
   /**
+   * MULTI-IMAGE PRODUCT GALLERY MANAGEMENT (Cloudflare R2 + CDN)
+   */
+  function renderFormImagePreviews() {
+    if (!els.productImagesGrid) return;
+    els.productImagesGrid.innerHTML = '';
+
+    state.editingProductImages.forEach((url, idx) => {
+      const tile = document.createElement('div');
+      tile.className = `img-preview-tile ${idx === 0 ? 'is-cover' : ''}`;
+      tile.dataset.index = idx;
+
+      tile.innerHTML = `
+        <img src="${escapeHtml(url)}" alt="Product Image ${idx + 1}" loading="lazy" />
+        ${idx === 0 ? '<span class="cover-badge"><span class="material-symbols-outlined" aria-hidden="true">star</span> Main Cover</span>' : ''}
+        <div class="preview-tile-actions">
+          ${idx !== 0 ? `<button type="button" class="preview-action-btn set-cover-btn" data-action="set-cover" data-index="${idx}" title="Set as primary cover image">
+            <span class="material-symbols-outlined" aria-hidden="true">star</span>
+          </button>` : ''}
+          <button type="button" class="preview-action-btn delete-btn" data-action="remove" data-index="${idx}" title="Remove image">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+        </div>
+      `;
+      els.productImagesGrid.appendChild(tile);
+    });
+
+    if (state.isUploadingImages) {
+      const uploadingTile = document.createElement('div');
+      uploadingTile.className = 'img-preview-tile uploading';
+      uploadingTile.innerHTML = `
+        <div class="upload-spinner"></div>
+        <span class="uploading-label">Uploading to R2 CDN...</span>
+      `;
+      els.productImagesGrid.appendChild(uploadingTile);
+    }
+  }
+
+  function addProductImageUrl(url) {
+    const trimmed = (url || '').trim();
+    if (!trimmed) return false;
+    if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://') && !trimmed.startsWith('/')) {
+      showToast('Please enter a valid image URL starting with https://', 'error');
+      return false;
+    }
+    state.editingProductImages.push(trimmed);
+    renderFormImagePreviews();
+    const errEl = document.getElementById('errImageUrl');
+    if (errEl) errEl.classList.add('hidden');
+    return true;
+  }
+
+  function removeProductImage(index) {
+    state.editingProductImages.splice(index, 1);
+    renderFormImagePreviews();
+  }
+
+  function setCoverProductImage(index) {
+    if (index > 0 && index < state.editingProductImages.length) {
+      const [chosen] = state.editingProductImages.splice(index, 1);
+      state.editingProductImages.unshift(chosen);
+      renderFormImagePreviews();
+      showToast('Cover photo updated!', 'info');
+    }
+  }
+
+  async function handleProductImageUpload(files) {
+    if (!files || files.length === 0) return;
+
+    if (!state.isAdminAuthenticated) {
+      openLoginModal('Please log in as admin to upload images to Cloudflare R2.');
+      return;
+    }
+
+    state.isUploadingImages = true;
+    renderFormImagePreviews();
+
+    let uploadedCount = 0;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file.type.startsWith('image/')) {
+        showToast(`Skipped "${file.name}": file is not an image.`, 'warning');
+        continue;
+      }
+
+      try {
+        const base64Data = await readFileAsBase64(file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            imageBase64: base64Data,
+            filename: file.name,
+            contentType: file.type
+          })
+        });
+
+        if (res.status === 401) {
+          handleAuthExpired();
+          state.isUploadingImages = false;
+          renderFormImagePreviews();
+          return;
+        }
+
+        const json = await res.json();
+        if (res.ok && json.success && json.data && json.data.url) {
+          state.editingProductImages.push(json.data.url);
+          uploadedCount++;
+          const errEl = document.getElementById('errImageUrl');
+          if (errEl) errEl.classList.add('hidden');
+        } else {
+          showToast(`Error uploading "${file.name}": ` + (json.error || 'Server error'), 'error');
+        }
+      } catch (err) {
+        showToast(`Upload failed for "${file.name}": ` + err.message, 'error');
+      }
+    }
+
+    state.isUploadingImages = false;
+    renderFormImagePreviews();
+
+    if (uploadedCount > 0) {
+      showToast(`Uploaded ${uploadedCount} image${uploadedCount > 1 ? 's' : ''} to Cloudflare R2 CDN!`, 'success');
+    }
+  }
+
+  /**
    * ADD & EDIT MODAL
    */
   function openAddModal() {
@@ -1538,6 +1691,11 @@
     const nextSeq = state.records.length + 1;
     els.formSku.value = `CDA-ACC-${String(nextSeq).padStart(3, '0')}`;
     els.formPublished.checked = true;
+
+    state.editingProductImages = [];
+    state.isUploadingImages = false;
+    if (els.formAddImageUrlInput) els.formAddImageUrlInput.value = '';
+    renderFormImagePreviews();
 
     clearFormErrors();
     els.modalBackdrop.classList.remove('hidden');
@@ -1562,10 +1720,14 @@
     els.formDimensions.value = item.dimensions || '';
     els.formWeight.value = item.weight || '';
     els.formGuild.value = item.guild || '';
-    els.formImageUrl.value = (item.images && item.images.length > 0) ? item.images[0] : '';
     els.formDescription.value = item.description || '';
     els.formSymbolism.value = item.symbolism || '';
     els.formPublished.checked = !!item.published;
+
+    state.editingProductImages = Array.isArray(item.images) ? [...item.images] : (item.imageUrl ? [item.imageUrl] : []);
+    state.isUploadingImages = false;
+    if (els.formAddImageUrlInput) els.formAddImageUrlInput.value = '';
+    renderFormImagePreviews();
 
     clearFormErrors();
     els.modalBackdrop.classList.remove('hidden');
@@ -1596,7 +1758,6 @@
     const price = priceRaw === '' ? 0 : parseFloat(priceRaw);
     const stock = parseInt(els.formStock.value, 10);
     const origin = els.formOrigin.value.trim();
-    const imageUrl = els.formImageUrl.value.trim();
     const desc = els.formDescription.value.trim();
 
     let hasError = false;
@@ -1627,10 +1788,10 @@
       hasError = true;
       if (!firstErrorField) firstErrorField = els.formOrigin;
     }
-    if (!imageUrl) {
+    if (!state.editingProductImages || state.editingProductImages.length === 0) {
       document.getElementById('errImageUrl').classList.remove('hidden');
       hasError = true;
-      if (!firstErrorField) firstErrorField = els.formImageUrl;
+      if (!firstErrorField) firstErrorField = els.productDropzone || els.formAddImageUrlInput;
     }
     if (!desc) {
       document.getElementById('errDesc').classList.remove('hidden');
@@ -1676,7 +1837,7 @@
       dimensions: els.formDimensions.value.trim(),
       weight: els.formWeight.value.trim(),
       guild: els.formGuild.value.trim(),
-      images: [imageUrl],
+      images: state.editingProductImages,
       description: desc,
       symbolism: els.formSymbolism.value.trim(),
       published: els.formPublished.checked
@@ -2098,11 +2259,44 @@
       renderAdminRegistry();
     });
 
-    // Cloudflare R2 / Storage Image Upload Event Listeners
+    // Product Multi-Image Grid Action Handlers (Delete, Set Cover)
+    if (els.productImagesGrid) {
+      els.productImagesGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.preview-action-btn');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const index = parseInt(btn.dataset.index, 10);
+        if (action === 'remove') {
+          removeProductImage(index);
+        } else if (action === 'set-cover') {
+          setCoverProductImage(index);
+        }
+      });
+    }
+
+    // Direct Image URL Add Bar
+    if (els.addImageUrlBtn && els.formAddImageUrlInput) {
+      els.addImageUrlBtn.addEventListener('click', () => {
+        if (addProductImageUrl(els.formAddImageUrlInput.value)) {
+          els.formAddImageUrlInput.value = '';
+        }
+      });
+      els.formAddImageUrlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (addProductImageUrl(els.formAddImageUrlInput.value)) {
+            els.formAddImageUrlInput.value = '';
+          }
+        }
+      });
+    }
+
+    // Cloudflare R2 Multi-Image File Selection (Supports Multiple Files)
     if (els.productImageFile) {
       els.productImageFile.addEventListener('change', (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) uploadImageViaR2(file, els.formImageUrl, els.productUploadBtnText);
+        if (e.target.files && e.target.files.length > 0) {
+          handleProductImageUpload(Array.from(e.target.files));
+        }
         e.target.value = '';
       });
     }

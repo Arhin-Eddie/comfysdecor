@@ -603,19 +603,35 @@
           <input type="text" id="formGuild" class="form-input" placeholder="e.g. Living room console, office desk, entryway" />
         </div>
 
-        <!-- Primary Image URL with Cloudflare R2 Upload Button -->
+        <!-- Product Images & Gallery (Multiple Images & Previews) -->
         <div class="form-field col-span-2">
-          <label for="formImageUrl" class="form-label">Primary Image URL *</label>
-          <div class="input-upload-cluster">
-            <input type="url" id="formImageUrl" class="form-input font-mono text-sm" placeholder="https://... (or upload directly)" required />
-            <label class="btn-secondary upload-trigger-btn" title="Upload directly to Cloudflare R2">
-              <span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span>
-              <span id="productUploadBtnText">Upload Image</span>
-              <input type="file" id="productImageFile" accept="image/*" class="sr-only" />
-            </label>
+          <div class="image-section-header">
+            <label class="form-label">Product Photography &amp; Gallery *</label>
+            <span class="field-hint">Upload multiple images for this accessory (main cover, alternate angles, styling shots). Saves to Cloudflare R2 Edge CDN.</span>
           </div>
-          <span class="form-hint">Enter direct image link or click Upload Image (uploads to Cloudflare R2 storage bucket).</span>
-          <span class="form-error hidden" id="errImageUrl">A valid image URL is required.</span>
+
+          <!-- Dynamic Visual Previews Grid -->
+          <div id="productImagesGrid" class="product-images-grid"></div>
+
+          <!-- Uploader & Direct URL Bar -->
+          <div class="image-uploader-panel">
+            <label class="image-dropzone-tile" id="productDropzone" title="Upload directly to Cloudflare R2">
+              <span class="material-symbols-outlined dropzone-icon" aria-hidden="true">cloud_upload</span>
+              <span class="dropzone-title">Upload Photos to Cloudflare R2</span>
+              <span class="dropzone-sub">Click to select 1 or more images (JPEG, PNG, WEBP, AVIF)</span>
+              <input type="file" id="productImageFile" accept="image/*" multiple class="sr-only" />
+            </label>
+
+            <!-- Direct URL Option -->
+            <div class="image-url-add-bar">
+              <input type="url" id="formAddImageUrlInput" class="form-input font-mono text-sm" placeholder="Or paste image URL (https://...)" />
+              <button type="button" class="btn-secondary" id="addImageUrlBtn">
+                <span class="material-symbols-outlined" aria-hidden="true">add_photo_alternate</span>
+                <span>Add URL</span>
+              </button>
+            </div>
+          </div>
+          <span class="form-error hidden" id="errImageUrl">At least one product image is required.</span>
         </div>
 
         <!-- Product Description -->
