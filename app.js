@@ -928,6 +928,9 @@
 
     els.publicEmptyState.classList.add('hidden');
 
+    // Production SEO: Dynamically update ItemList structured data in DOM
+    updateCatalogItemListStructuredData(list);
+
     // Build Product Cards
     const frag = document.createDocumentFragment();
     list.forEach(item => {
@@ -1154,10 +1157,91 @@
   }
 
   /**
+   * PRODUCTION SEO & STRUCTURED DATA (JSON-LD)
+   */
+  function updateCatalogItemListStructuredData(items) {
+    let script = document.getElementById('catalogItemListJsonLd');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'catalogItemListJsonLd';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'name': "Comfy's Decor Accessories Product Catalog",
+      'numberOfItems': items.length,
+      'itemListElement': items.slice(0, 30).map((it, idx) => ({
+        '@type': 'ListItem',
+        'position': idx + 1,
+        'item': {
+          '@type': 'Product',
+          'name': it.title,
+          'sku': it.sku,
+          'image': (it.images && it.images[0]) ? it.images[0] : 'https://comfysdecor.com/assets/comfys_flyer.png',
+          'description': it.description || 'Decorative accessory for home, kitchen and office in Ghana.',
+          'brand': {
+            '@type': 'Brand',
+            'name': "Comfy's Decor Accessories"
+          },
+          'offers': {
+            '@type': 'Offer',
+            'priceCurrency': 'GHS',
+            'price': it.priceGhs,
+            'itemCondition': 'https://schema.org/NewCondition',
+            'availability': (Number(it.stockQty) > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+          }
+        }
+      }))
+    };
+    script.textContent = JSON.stringify(schema);
+  }
+
+  function updateProductStructuredData(item) {
+    let script = document.getElementById('productSchemaJsonLd');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'productSchemaJsonLd';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      'name': item.title,
+      'sku': item.sku,
+      'image': (item.images && item.images.length) ? item.images : ['https://comfysdecor.com/assets/comfys_flyer.png'],
+      'description': item.description || 'Modern decorative accessory for interior styling in Ghana.',
+      'category': item.category,
+      'brand': {
+        '@type': 'Brand',
+        'name': "Comfy's Decor Accessories"
+      },
+      'offers': {
+        '@type': 'Offer',
+        'url': `https://comfysdecor.com/#product-${item.id}`,
+        'priceCurrency': 'GHS',
+        'price': item.priceGhs,
+        'itemCondition': 'https://schema.org/NewCondition',
+        'availability': (Number(item.stockQty) > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        'seller': {
+          '@type': 'Organization',
+          'name': "Comfy's Decor Accessories"
+        }
+      }
+    };
+    script.textContent = JSON.stringify(schema);
+  }
+
+  /**
    * ARTIFACT INSPECTION DRAWER (Product Detail View)
    */
   function openArtifactDrawer(item) {
     state.activeArtifact = item;
+
+    // Production SEO: Dynamically update individual Product Schema for search crawlers
+    updateProductStructuredData(item);
 
     els.drawerSku.textContent = item.sku;
     els.drawerOrigin.textContent = item.category + (item.origin ? ` • ${item.origin}` : '');
@@ -1261,6 +1345,9 @@
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     state.activeArtifact = null;
+
+    const prodScript = document.getElementById('productSchemaJsonLd');
+    if (prodScript) prodScript.remove();
   }
 
   /**

@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /styles.css
+Allow: /app.js
+Allow: /sitemap.xml
+
+# Protect private admin management areas from search indexing
+Disallow: /admin
+Disallow: /login
+Disallow: /#admin
+Disallow: /api/admin/
+Disallow: /api/upload
+Disallow: /api/products/reset
+Disallow: /api/products/import
+
+Sitemap: https://comfysdecor.com/sitemap.xml

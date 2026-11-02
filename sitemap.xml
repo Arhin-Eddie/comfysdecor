@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Primary Storefront Homepage -->
+  <url>
+    <loc>https://comfysdecor.com/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://comfysdecor.com/assets/comfys_flyer.png</image:loc>
+      <image:title>Comfy's Decor Accessories - Modern Home, Kitchen and Office Decor</image:title>
+      <image:caption>Curated decorative accessories, sculptures, vases and ambient lighting across Ghana</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://comfysdecor.com/assets/comfys_logo.png</image:loc>
+      <image:title>Comfy's Decor Accessories Logo</image:title>
+    </image:image>
+  </url>
+
+  <!-- Living Room Décor Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#living-room</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Kitchen Accessories Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#kitchen</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Office Décor Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#office</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Sculptures & Figurines Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#sculptures</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Decorative Lighting Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#lighting</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Decorative Vases Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#vases</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tabletop Accessories Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#tabletop</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Wall Décor Collection -->
+  <url>
+    <loc>https://comfysdecor.com/#wall-decor</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

@@ -62,12 +62,74 @@ function requireAdminAuth(req, res, next) {
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname)));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ success: true, timestamp: new Date().toISOString(), database: 'Neon PostgreSQL' });
 });
+
+// Production SEO: Dynamic XML Sitemap (Includes live Neon database products & images)
+function escapeXml(unsafe) {
+  return String(unsafe || '').replace(/[<>&'"]/g, c => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '\'': return '&apos;';
+      case '"': return '&quot;';
+      default: return c;
+    }
+  });
+}
+
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const host = req.get('host') || 'comfysdecor.com';
+    const proto = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    const baseUrl = `${proto}://${host}`;
+    const products = await db.getAllProducts();
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n';
+
+    // Homepage
+    xml += `  <url>\n    <loc>${baseUrl}/</loc>\n    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n`;
+    xml += `    <image:image>\n      <image:loc>${baseUrl}/assets/comfys_flyer.png</image:loc>\n      <image:title>Comfy's Decor Accessories</image:title>\n    </image:image>\n  </url>\n`;
+
+    // Category Anchors
+    const categories = ['living-room', 'kitchen', 'office', 'sculptures', 'vases', 'tabletop', 'lighting', 'wall-decor'];
+    for (const cat of categories) {
+      xml += `  <url>\n    <loc>${baseUrl}/#${cat}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    }
+
+    // Individual Products
+    if (Array.isArray(products)) {
+      for (const p of products) {
+        if (p.published) {
+          xml += `  <url>\n    <loc>${baseUrl}/#product-${p.id}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n`;
+          if (p.images && p.images.length > 0) {
+            const imgUrl = p.images[0].startsWith('http') ? p.images[0] : `${baseUrl}${p.images[0]}`;
+            xml += `    <image:image>\n      <image:loc>${escapeXml(imgUrl)}</image:loc>\n      <image:title>${escapeXml(p.title)}</image:title>\n    </image:image>\n`;
+          }
+          xml += `  </url>\n`;
+        }
+      }
+    }
+
+    xml += '</urlset>';
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (err) {
+    res.sendFile(path.join(__dirname, 'sitemap.xml'));
+  }
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
+// Serve static assets and static files
+app.use(express.static(path.join(__dirname)));
 
 // Admin Authentication Endpoints (Verified directly against Neon PostgreSQL)
 app.post('/api/admin/login', async (req, res) => {
