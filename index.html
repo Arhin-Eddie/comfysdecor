@@ -558,11 +558,11 @@
           </select>
         </div>
 
-        <!-- Base Price (GH₵) -->
+        <!-- Base Price (GH₵) - Optional -->
         <div class="form-field">
-          <label for="formPrice" class="form-label">Price (GH₵) *</label>
-          <input type="number" id="formPrice" class="form-input font-mono" min="1" step="any" placeholder="680" required />
-          <span class="form-error hidden" id="errPrice">Valid price in GH₵ is required.</span>
+          <label for="formPrice" class="form-label">Price (GH₵) <span class="field-hint" style="display:inline;font-weight:normal;">(Optional — can add later)</span></label>
+          <input type="number" id="formPrice" class="form-input font-mono" min="0" step="any" placeholder="e.g. 680 (leave blank for 'Price on Request')" />
+          <span class="form-error hidden" id="errPrice">Please enter a valid price number (or leave blank).</span>
         </div>
 
         <!-- Physical Stock Quantity -->

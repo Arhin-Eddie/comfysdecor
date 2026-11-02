@@ -875,7 +875,10 @@
    * CURRENCY FORMATTER (Ghanaian Cedis)
    */
   function formatGhs(amount) {
-    const num = Number(amount) || 0;
+    const num = Number(amount);
+    if (!num || num <= 0) {
+      return 'Price on Request';
+    }
     return 'GH₵ ' + num.toLocaleString('en-GH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
@@ -1389,7 +1392,8 @@
 
     // Direct WhatsApp Ordering Link using dynamic store contact
     const waNumber = (state.storeInfo && state.storeInfo.whatsappNumber) ? state.storeInfo.whatsappNumber : WHATSAPP_PHONE_NUMBER;
-    const msg = encodeURIComponent(`Hello Comfy's Decor Accessories, I would like to order: "${item.title}" (SKU: ${item.sku}) listed at ${formatGhs(item.priceGhs)}.`);
+    const priceText = Number(item.priceGhs) > 0 ? `listed at ${formatGhs(item.priceGhs)}` : 'to confirm pricing';
+    const msg = encodeURIComponent(`Hello Comfy's Decor Accessories, I would like to order: "${item.title}" (SKU: ${item.sku}) ${priceText}.`);
     els.drawerInquireLink.href = `https://wa.me/${waNumber}?text=${msg}`;
 
     // Show Drawer & Lock document background scroll
@@ -1549,7 +1553,7 @@
     els.formTitle.value = item.title || '';
     els.formSku.value = item.sku || '';
     els.formCategory.value = item.category || 'Living Room Décor';
-    els.formPrice.value = item.priceGhs || '';
+    els.formPrice.value = (item.priceGhs && Number(item.priceGhs) > 0) ? item.priceGhs : '';
     els.formStock.value = item.stockQty !== undefined ? item.stockQty : 1;
     els.formOrigin.value = item.origin || '';
     els.formMaterial.value = item.material || '';
@@ -1586,7 +1590,8 @@
     const title = els.formTitle.value.trim();
     const sku = els.formSku.value.trim().toUpperCase();
     const category = els.formCategory.value;
-    const price = parseFloat(els.formPrice.value);
+    const priceRaw = els.formPrice.value.trim();
+    const price = priceRaw === '' ? 0 : parseFloat(priceRaw);
     const stock = parseInt(els.formStock.value, 10);
     const origin = els.formOrigin.value.trim();
     const imageUrl = els.formImageUrl.value.trim();
@@ -1602,7 +1607,7 @@
       document.getElementById('errSku').classList.remove('hidden');
       hasError = true;
     }
-    if (isNaN(price) || price <= 0) {
+    if (isNaN(price) || price < 0) {
       document.getElementById('errPrice').classList.remove('hidden');
       hasError = true;
     }
