@@ -27,6 +27,7 @@ desktop.ini
 .idea/
 *.sublime-project
 *.sublime-workspace
+.vercel/
 
 # Runtime temporary files
 *.pid

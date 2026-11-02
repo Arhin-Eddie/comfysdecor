@@ -63,6 +63,37 @@ function requireAdminAuth(req, res, next) {
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+// Lazy DB initialization helper (critical for Vercel serverless functions & local dev)
+let isDbInitialized = false;
+let dbInitPromise = null;
+
+async function ensureDbReady() {
+  if (isDbInitialized) return;
+  if (!dbInitPromise) {
+    dbInitPromise = db.initDb()
+      .then(() => {
+        isDbInitialized = true;
+      })
+      .catch((err) => {
+        dbInitPromise = null;
+        console.error('Failed to initialize Neon PostgreSQL database:', err);
+      });
+  }
+  await dbInitPromise;
+}
+
+// Middleware ensuring Neon DB schema is ready before API handling
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path === '/sitemap.xml') {
+    try {
+      await ensureDbReady();
+    } catch (err) {
+      console.warn('Database readiness check warning:', err.message);
+    }
+  }
+  next();
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ success: true, timestamp: new Date().toISOString(), database: 'Neon PostgreSQL' });
@@ -390,15 +421,20 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start server after ensuring DB connection & tables
-db.initDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Comfy's Decor Accessories running at http://localhost:${PORT}`);
-      console.log('Connected to Neon PostgreSQL database.');
+// Export app for Vercel Serverless Functions
+module.exports = app;
+
+// Start server if executed directly (e.g. npm start / node server.js / Render / Railway)
+if (require.main === module) {
+  ensureDbReady()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Comfy's Decor Accessories running at http://localhost:${PORT}`);
+        console.log('Connected to Neon PostgreSQL database.');
+      });
+    })
+    .catch((err) => {
+      console.error('Failed to initialize Neon PostgreSQL database:', err);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error('Failed to initialize Neon PostgreSQL database:', err);
-    process.exit(1);
-  });
+}
