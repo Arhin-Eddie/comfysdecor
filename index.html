@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comfy's Decor Accessories — Modern Home, Kitchen &amp; Office Décor</title>
+  <meta name="description" content="Beautiful decorative accessories for your home, kitchen and office. Browse modern sculptures, vases, lighting, tabletop, and functional styling pieces in Ghana." />
+  
+  <!-- Typography: DM Sans for editorial polish, Playfair Display for flyer serif, Inter for technical clarity -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet" />
+  
+  <!-- Google Material Symbols (Outlined, minimal stroke) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..500,0..1,-50..200" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Global Header (Clean, slim 54px, architectural border) -->
+  <header class="app-header" id="appHeader">
+    <div class="header-inner">
+      <!-- Brand & Logo -->
+      <a href="#catalog" class="brand-link" id="brandHomeLink" aria-label="Comfy's Decor Accessories Home">
+        <img src="assets/comfys_logo.png" alt="Comfy's Decor Accessories CDA Logo" class="brand-logo-img" />
+        <div class="brand-copy">
+          <span class="brand-title">Comfy's</span>
+          <span class="brand-tag">Decor Accessories</span>
+        </div>
+      </a>
+
+      <!-- Quick Search Input in Header (Desktop) -->
+      <div class="header-search-wrap">
+        <span class="material-symbols-outlined header-search-icon" aria-hidden="true">search</span>
+        <input 
+          type="search" 
+          id="headerSearchInput" 
+          class="header-search-input" 
+          placeholder="Search home, kitchen, and office accessories..." 
+          aria-label="Search catalog" 
+        />
+        <button type="button" class="clear-search-btn hidden" id="clearSearchBtn" aria-label="Clear search query">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation & Mode Controls -->
+      <div class="header-controls">
+        <!-- Direct WhatsApp Quick Link -->
+        <a href="https://wa.me/233595427789" class="header-whatsapp-pill" id="headerWaLink" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
+          <span class="material-symbols-outlined header-wa-icon" aria-hidden="true">chat</span>
+          <span class="header-wa-label" id="headerWaLabel">059 542 7789</span>
+        </a>
+
+        <!-- Admin Shortcut (Hidden from public shoppers; only appears when admin is actively logged in) -->
+        <a href="/admin" class="header-admin-pill hidden" id="headerAdminPill" title="Access Store Admin Registry">
+          <span class="material-symbols-outlined nav-icon" aria-hidden="true">tune</span>
+          <span>Admin</span>
+        </a>
+
+        <!-- Density / Layout Switcher (Grid vs Dense List) -->
+        <div class="view-density-group" role="group" aria-label="Grid layout density">
+          <button type="button" class="density-btn active" id="gridDensityBtn" title="Compact Grid view" aria-pressed="true">
+            <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+          </button>
+          <button type="button" class="density-btn" id="listDensityBtn" title="Dense List view" aria-pressed="false">
+            <span class="material-symbols-outlined" aria-hidden="true">view_list</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Catalog Workspace -->
+  <main class="main-layout" id="mainContent">
+
+    <!-- 1. PUBLIC STOREFRONT VIEW -->
+    <div id="publicStorefrontSection" class="view-panel active">
+
+      <!-- Compact Brand Intro Strip (Directly aligned with official flyer) -->
+      <section class="brand-intro-strip" aria-label="Brand introduction">
+        <div class="brand-intro-content">
+          <span class="brand-eyebrow" id="heroEyebrow">Do you need a</span>
+          <h1 class="brand-hero-title">
+            <span class="hero-accent-serif" id="heroSerif">decorative accessory</span>
+            <span class="hero-target-rooms" id="heroTargetRooms">for your Home, Kitchen or Office?</span>
+          </h1>
+          <p class="brand-hero-sub" id="heroSubtext"><strong class="brand-accent-red">Comfy's Decor Accessories</strong> has got exactly what you need. Browse our curated sculptures, ambient lighting, vases, and interior styling accents.</p>
+        </div>
+        <div class="brand-channels-row">
+          <a href="https://wa.me/233595427789" class="channel-pill wa-pill" id="heroWaLink" target="_blank" rel="noopener noreferrer" title="Order via WhatsApp">
+            <span class="material-symbols-outlined pill-icon" aria-hidden="true">chat</span>
+            <span>WhatsApp: <strong id="heroWaLabel">059 542 7789</strong></span>
+          </a>
+          <a href="https://www.snapchat.com/add/comfys_decorate" class="channel-pill snap-pill" id="heroSnapLink" target="_blank" rel="noopener noreferrer" title="Follow on Snapchat">
+            <span class="material-symbols-outlined pill-icon" aria-hidden="true">photo_camera</span>
+            <span>Snapchat: <strong id="heroSnapLabel">@comfys_decorate</strong></span>
+          </a>
+          <span class="channel-pill delivery-pill">
+            <span class="material-symbols-outlined pill-icon" aria-hidden="true">local_shipping</span>
+            <span id="heroDeliveryLabel">Delivery Across Ghana</span>
+          </span>
+          <a href="assets/comfys_flyer.png" target="_blank" class="channel-pill flyer-pill" title="View Official Store Flyer">
+            <span class="material-symbols-outlined pill-icon" aria-hidden="true">image</span>
+            <span>Store Flyer</span>
+          </a>
+        </div>
+      </section>
+      
+      <!-- Sub-Bar: Filter & Sort Registers (1-row compact layout) -->
+      <section class="catalog-subbar" aria-label="Catalog filters and counters">
+        <!-- Categories Horizontal Register (Horizontally scrollable) -->
+        <nav class="category-strip" id="categoryRegister" aria-label="Decor accessory categories">
+          <button type="button" class="cat-pill active" data-category="ALL">All Items</button>
+          <button type="button" class="cat-pill" data-category="Living Room Décor">Living Room Décor</button>
+          <button type="button" class="cat-pill" data-category="Kitchen Accessories">Kitchen Accessories</button>
+          <button type="button" class="cat-pill" data-category="Office Décor">Office Décor</button>
+          <button type="button" class="cat-pill" data-category="Sculptures &amp; Figurines">Sculptures &amp; Figurines</button>
+          <button type="button" class="cat-pill" data-category="Decorative Vases">Decorative Vases</button>
+          <button type="button" class="cat-pill" data-category="Tabletop Accessories">Tabletop Accessories</button>
+          <button type="button" class="cat-pill" data-category="Decorative Lighting">Decorative Lighting</button>
+          <button type="button" class="cat-pill" data-category="Wall Décor">Wall Décor</button>
+        </nav>
+
+        <!-- Sort, In-Stock Filter & Stats -->
+        <div class="subbar-meta">
+          <label class="filter-toggle" title="Only display available items with physical inventory">
+            <input type="checkbox" id="inStockOnlyCheckbox" />
+            <span class="toggle-text">In-Stock Only</span>
+          </label>
+
+          <div class="sort-selector-wrap">
+            <label for="catalogSortSelect" class="sr-only">Sort accessories</label>
+            <span class="material-symbols-outlined sort-icon" aria-hidden="true">sort</span>
+            <select id="catalogSortSelect" class="sort-select">
+              <option value="featured">Order: Curated</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="title-asc">Title: A – Z</option>
+            </select>
+          </div>
+
+          <div class="catalog-counter" id="catalogCounter" aria-live="polite">
+            <span id="counterText">Showing 0 accessories</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Filter Tags (Appears only when search or filters applied) -->
+      <div id="activeFilterPills" class="active-filters-row hidden" aria-live="polite">
+        <span class="active-filter-label">Active Filters:</span>
+        <div id="filterPillsList" class="filter-pills-list"></div>
+        <button type="button" class="clear-all-filters-btn" id="clearAllFiltersBtn">Clear All</button>
+      </div>
+
+      <!-- Catalog Product Grid (Compact, 2 columns on mobile, 4 columns on desktop) -->
+      <section class="catalog-grid-wrapper" aria-label="Decor accessories product grid">
+        <div class="catalog-grid" id="catalogGrid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <!-- Empty State for Public View -->
+        <div class="empty-state-box hidden" id="publicEmptyState" role="region" aria-live="polite">
+          <div class="empty-icon-wrap">
+            <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
+          </div>
+          <h2 class="empty-title" id="emptyStateTitle">No accessories found</h2>
+          <p class="empty-description" id="emptyStateDesc">There are no records matching your current criteria or the catalog data is currently empty.</p>
+          <div class="empty-actions" id="emptyStateActions">
+            <button type="button" class="btn-secondary" id="emptyResetFilterBtn">Reset Filters</button>
+            <button type="button" class="btn-primary" id="emptyLoadSampleBtn">Load Sample Catalog</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Restrained Catalog Footer -->
+      <footer class="catalog-footer">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <span class="footer-heading">About Comfy's Decor</span>
+            <p class="footer-text">Comfy's Decor Accessories offers a refined selection of contemporary decorative accessories, sculptures, tabletop pieces, lighting, vases, and functional interior styling items for homes, kitchens, and offices throughout Ghana.</p>
+          </div>
+          <div class="footer-col">
+            <span class="footer-heading">Direct Ordering &amp; Inquiries</span>
+            <p class="footer-text">
+              Browse the catalog and tap "Order via WhatsApp" on any item to place an order or inquire about styling.<br /><br />
+              <strong>WhatsApp:</strong> <a href="https://wa.me/233595427789" id="footerWaLink" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary);font-weight:600;"><span id="footerWaLabel">059 542 7789</span></a><br />
+              <strong>Snapchat:</strong> <a href="https://www.snapchat.com/add/comfys_decorate" id="footerSnapLink" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);font-weight:600;"><span id="footerSnapLabel">@comfys_decorate</span></a><br />
+              <span id="footerLocationHours"><strong>Location:</strong> Accra, Ghana • <strong>Hours:</strong> Mon - Sat: 8:00 AM - 7:00 PM</span>
+            </p>
+          </div>
+          <div class="footer-col">
+            <span class="footer-heading">Delivery &amp; Pricing</span>
+            <p class="footer-text" id="footerDeliveryText">All prices are shown in Ghanaian Cedis (GH₵). Fast delivery is available within Accra, Kumasi, and nationwide across Ghana. Payment arrangements are finalized easily during WhatsApp consultation.</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>&copy; <span id="currentYear"></span> Comfy's Decor Accessories. Beautiful decorative accessories for your home, kitchen and office.</span>
+          <span class="footer-mode-tag">Ghana Retail Catalog</span>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- 2. ADMIN INVENTORY REGISTRY VIEW -->
+    <div id="adminInventorySection" class="view-panel hidden">
+      
+      <!-- Admin Workspace Header -->
+      <div class="admin-topbar">
+        <div class="admin-headline">
+          <div class="admin-title-row">
+            <h1 class="admin-title">Catalog Inventory &amp; Registry</h1>
+            <span class="admin-status-badge">Admin Workspace</span>
+          </div>
+          <p class="admin-subtext">Manage live records, toggle storefront visibility, update physical quantities, and maintain decor catalog data accurately.</p>
+        </div>
+
+        <div class="admin-topbar-actions">
+          <button type="button" class="btn-secondary" id="viewStorefrontBtn" title="View Customer Storefront">
+            <span class="material-symbols-outlined" aria-hidden="true">storefront</span>
+            <span>View Storefront</span>
+          </button>
+          <button type="button" class="btn-secondary" id="openSettingsModalBtn" title="Update store contact numbers, Snapchat, announcements, and info">
+            <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+            <span>Store Settings</span>
+          </button>
+          <button type="button" class="btn-secondary danger" id="adminLogoutBtn" title="Log out from Store Admin">
+            <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+            <span>Log Out</span>
+          </button>
+          <button type="button" class="btn-secondary" id="exportCatalogBtn" title="Export catalog to JSON file">
+            <span class="material-symbols-outlined" aria-hidden="true">download</span>
+            <span>Export JSON</span>
+          </button>
+          <button type="button" class="btn-secondary" id="importCatalogBtn" title="Import catalog from JSON file">
+            <span class="material-symbols-outlined" aria-hidden="true">upload</span>
+            <span>Import JSON</span>
+          </button>
+          <input type="file" id="importFileInput" accept=".json" class="sr-only" />
+          <button type="button" class="btn-primary" id="openAddModalBtn">
+            <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            <span>Add New Item</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Summary Metrics -->
+      <div class="admin-summary-grid">
+        <div class="summary-metric-card">
+          <span class="metric-label">Total Registered</span>
+          <div class="metric-val-row">
+            <span class="metric-value" id="statTotalCount">0</span>
+            <span class="metric-unit">items</span>
+          </div>
+        </div>
+        <div class="summary-metric-card">
+          <span class="metric-label">Published (Live)</span>
+          <div class="metric-val-row">
+            <span class="metric-value text-success" id="statPublishedCount">0</span>
+            <span class="metric-unit">on storefront</span>
+          </div>
+        </div>
+        <div class="summary-metric-card">
+          <span class="metric-label">Drafts / Unlisted</span>
+          <div class="metric-val-row">
+            <span class="metric-value text-muted" id="statDraftCount">0</span>
+            <span class="metric-unit">hidden from public</span>
+          </div>
+        </div>
+        <div class="summary-metric-card">
+          <span class="metric-label">Total Catalog Valuation</span>
+          <div class="metric-val-row">
+            <span class="metric-value" id="statValuation">GH₵ 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Filter & Search -->
+      <div class="admin-filter-bar">
+        <div class="admin-search-wrap">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+          <input type="search" id="adminSearchInput" class="admin-search-input" placeholder="Filter admin table by title, SKU, category..." />
+        </div>
+        <div class="admin-filter-tabs" id="adminStatusTabs">
+          <button type="button" class="admin-tab active" data-status="ALL">All (<span id="tabCountAll">0</span>)</button>
+          <button type="button" class="admin-tab" data-status="PUBLISHED">Published (<span id="tabCountPub">0</span>)</button>
+          <button type="button" class="admin-tab" data-status="DRAFT">Drafts (<span id="tabCountDraft">0</span>)</button>
+          <button type="button" class="admin-tab" data-status="LOW_STOCK">Low Stock (≤2) (<span id="tabCountLow">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Space-Efficient Inventory Table -->
+      <div class="admin-table-container">
+        <table class="inventory-table" id="inventoryTable">
+          <thead>
+            <tr>
+              <th scope="col" class="col-thumb">Item</th>
+              <th scope="col" class="col-sku">SKU</th>
+              <th scope="col" class="col-title">Item Title</th>
+              <th scope="col" class="col-category">Category</th>
+              <th scope="col" class="col-price">Base Price</th>
+              <th scope="col" class="col-stock">Physical Stock</th>
+              <th scope="col" class="col-status">Status</th>
+              <th scope="col" class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+
+        <!-- Admin Table Empty State -->
+        <div class="admin-empty-state hidden" id="adminEmptyState">
+          <p>No catalog records match the selected status filter.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- PRODUCT INSPECTION DRAWER / MODAL -->
+  <div class="drawer-backdrop hidden" id="drawerBackdrop" aria-hidden="true"></div>
+  <aside class="artifact-drawer hidden" id="artifactDrawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="drawer-header">
+      <div class="drawer-header-meta">
+        <span class="drawer-sku" id="drawerSku">CDA-SCU-012</span>
+        <span class="drawer-origin" id="drawerOrigin">Living Room Décor</span>
+      </div>
+      <button type="button" class="drawer-close-btn" id="closeDrawerBtn" aria-label="Close product details">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <div class="drawer-body" id="drawerBody">
+      <!-- Media Gallery -->
+      <div class="drawer-gallery">
+        <div class="main-photo-frame">
+          <img id="drawerMainImage" src="" alt="" class="drawer-main-img" />
+          <div class="gallery-counter" id="drawerGalleryCounter">1 / 1</div>
+        </div>
+        <div class="drawer-thumbnails-strip" id="drawerThumbnailsStrip">
+          <!-- Thumbnail buttons generated dynamically -->
+        </div>
+      </div>
+
+      <!-- Core Specs & Valuation -->
+      <div class="drawer-content-flow">
+        <div class="drawer-title-row">
+          <h2 class="drawer-title" id="drawerTitle">Product Name</h2>
+          <div class="drawer-price-tag">
+            <span class="price-ghs" id="drawerPriceGhs">GH₵ 0</span>
+          </div>
+        </div>
+
+        <!-- Inventory State Badge -->
+        <div class="drawer-stock-indicator" id="drawerStockIndicator">
+          <span class="stock-dot"></span>
+          <span id="drawerStockText">In Stock</span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="drawer-section">
+          <h3 class="section-label">Product Details</h3>
+          <p class="drawer-text" id="drawerDescription">Product description and styling details.</p>
+        </div>
+
+        <!-- Specifications & Dimensions -->
+        <div class="drawer-section">
+          <h3 class="section-label">Specifications &amp; Dimensions</h3>
+          <dl class="specs-grid" id="drawerSpecsGrid">
+            <!-- Populated dynamically with only present fields -->
+          </dl>
+        </div>
+
+        <!-- Quality & Delivery Assurance -->
+        <div class="drawer-section">
+          <h3 class="section-label">Quality &amp; Delivery</h3>
+          <div class="guild-info-card">
+            <span class="material-symbols-outlined guild-icon" aria-hidden="true">verified</span>
+            <div class="guild-copy">
+              <span class="guild-name">Comfy's Quality Checked</span>
+              <span class="guild-sub">Inspected for pristine finish and securely packaged for delivery across Ghana.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Styling & Care Notes -->
+        <div class="drawer-section" id="drawerSymbolismSection">
+          <h3 class="section-label">Styling &amp; Care Recommendations</h3>
+          <p class="drawer-text-secondary" id="drawerSymbolism">Styling suggestions and care notes.</p>
+        </div>
+
+        <!-- Inquire / Order via WhatsApp -->
+        <div class="drawer-action-block">
+          <a href="#" id="drawerInquireLink" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+            <span>Order via WhatsApp</span>
+          </a>
+          <p class="inquire-note">Direct ordering with Comfy's on WhatsApp. Fast response, stock confirmation &amp; delivery arrangements.</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ADD / EDIT ITEM MODAL -->
+  <div class="modal-backdrop hidden" id="modalBackdrop" aria-hidden="true"></div>
+  <div class="editor-modal hidden" id="editorModal" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <span class="modal-tag">Inventory Maintenance</span>
+        <h2 class="modal-heading" id="modalHeading">Add New Item</h2>
+      </div>
+      <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Cancel and close dialog">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <form id="artifactForm" class="modal-form" novalidate>
+      <input type="hidden" id="editArtifactId" value="" />
+
+      <div class="form-grid">
+        <!-- Title -->
+        <div class="form-field col-span-2">
+          <label for="formTitle" class="form-label">Item Title *</label>
+          <input type="text" id="formTitle" class="form-input" placeholder="e.g. Modern Abstract Metallic Ribbon Sculpture" required />
+          <span class="form-error hidden" id="errTitle">Item title is required.</span>
+        </div>
+
+        <!-- SKU -->
+        <div class="form-field">
+          <label for="formSku" class="form-label">SKU / Catalog Code *</label>
+          <input type="text" id="formSku" class="form-input font-mono" placeholder="e.g. CDA-SCU-012" required />
+          <span class="form-error hidden" id="errSku">Valid SKU is required.</span>
+        </div>
+
+        <!-- Category -->
+        <div class="form-field">
+          <label for="formCategory" class="form-label">Category *</label>
+          <select id="formCategory" class="form-select" required>
+            <option value="Living Room Décor">Living Room Décor</option>
+            <option value="Kitchen Accessories">Kitchen Accessories</option>
+            <option value="Office Décor">Office Décor</option>
+            <option value="Sculptures &amp; Figurines">Sculptures &amp; Figurines</option>
+            <option value="Decorative Vases">Decorative Vases</option>
+            <option value="Tabletop Accessories">Tabletop Accessories</option>
+            <option value="Decorative Lighting">Decorative Lighting</option>
+            <option value="Wall Décor">Wall Décor</option>
+          </select>
+        </div>
+
+        <!-- Base Price (GH₵) -->
+        <div class="form-field">
+          <label for="formPrice" class="form-label">Price (GH₵) *</label>
+          <input type="number" id="formPrice" class="form-input font-mono" min="1" step="any" placeholder="680" required />
+          <span class="form-error hidden" id="errPrice">Valid price in GH₵ is required.</span>
+        </div>
+
+        <!-- Physical Stock Quantity -->
+        <div class="form-field">
+          <label for="formStock" class="form-label">Physical Stock Available *</label>
+          <input type="number" id="formStock" class="form-input font-mono" min="0" step="1" placeholder="4" required />
+          <span class="form-error hidden" id="errStock">Inventory count is required (0 or more).</span>
+        </div>
+
+        <!-- Color / Finish -->
+        <div class="form-field">
+          <label for="formOrigin" class="form-label">Color / Finish *</label>
+          <input type="text" id="formOrigin" class="form-input" placeholder="e.g. Brushed Gold, Matte Olive, Warm Cream" required />
+          <span class="form-error hidden" id="errOrigin">Color or finish is required.</span>
+        </div>
+
+        <!-- Material / Composition -->
+        <div class="form-field">
+          <label for="formMaterial" class="form-label">Material / Composition</label>
+          <input type="text" id="formMaterial" class="form-input" placeholder="e.g. Cast electroplated metal, marble base" />
+        </div>
+
+        <!-- Dimensions -->
+        <div class="form-field">
+          <label for="formDimensions" class="form-label">Dimensions (H × W × D)</label>
+          <input type="text" id="formDimensions" class="form-input" placeholder="e.g. 34 × 18 × 12 cm" />
+        </div>
+
+        <!-- Weight -->
+        <div class="form-field">
+          <label for="formWeight" class="form-label">Weight</label>
+          <input type="text" id="formWeight" class="form-input" placeholder="e.g. 1.2 kg" />
+        </div>
+
+        <!-- Room / Placement -->
+        <div class="form-field col-span-2">
+          <label for="formGuild" class="form-label">Room / Suggested Placement</label>
+          <input type="text" id="formGuild" class="form-input" placeholder="e.g. Living room console, office desk, entryway" />
+        </div>
+
+        <!-- Primary Image URL -->
+        <div class="form-field col-span-2">
+          <label for="formImageUrl" class="form-label">Primary Image URL *</label>
+          <input type="url" id="formImageUrl" class="form-input font-mono text-sm" placeholder="https://..." required />
+          <span class="form-hint">Direct link to high-resolution photo (clean styling framing recommended).</span>
+          <span class="form-error hidden" id="errImageUrl">A valid image URL is required.</span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="form-field col-span-2">
+          <label for="formDescription" class="form-label">Product Description *</label>
+          <textarea id="formDescription" class="form-textarea" rows="3" placeholder="Contemporary description of the item, features, and visual style..." required></textarea>
+          <span class="form-error hidden" id="errDesc">Description is required.</span>
+        </div>
+
+        <!-- Styling & Care Notes -->
+        <div class="form-field col-span-2">
+          <label for="formSymbolism" class="form-label">Styling &amp; Care Instructions</label>
+          <textarea id="formSymbolism" class="form-textarea" rows="2" placeholder="e.g. Wipe with dry microfiber cloth. Ideal paired with neutral ceramics..."></textarea>
+        </div>
+
+        <!-- Visibility Toggle -->
+        <div class="form-field col-span-2 form-checkbox-field">
+          <label class="checkbox-container">
+            <input type="checkbox" id="formPublished" checked />
+            <div class="checkbox-text-group">
+              <span class="checkbox-title">Publish to Storefront</span>
+              <span class="checkbox-subtitle">When checked, the item is visible to public visitors. When unchecked, it remains an internal draft.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancelModalBtn">Cancel</button>
+        <button type="submit" class="btn-primary" id="saveArtifactBtn">
+          <span class="material-symbols-outlined" aria-hidden="true">check</span>
+          <span id="saveBtnText">Save Item</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div class="modal-backdrop hidden" id="loginModalBackdrop" aria-hidden="true"></div>
+  <div class="login-modal hidden" id="adminLoginModal" role="dialog" aria-modal="true" aria-labelledby="loginHeading">
+    <div class="login-modal-header">
+      <div class="login-brand-badge">
+        <img src="assets/comfys_logo.png" alt="CDA Logo" class="login-logo-img" />
+        <div>
+          <span class="login-subtag">Store Management Portal</span>
+          <h2 class="login-heading" id="loginHeading">Store Admin Login</h2>
+        </div>
+      </div>
+      <button type="button" class="modal-close-btn" id="closeLoginModalBtn" aria-label="Cancel and close login">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <form id="adminLoginForm" class="login-form" novalidate>
+      <div class="login-intro-note">
+        <span class="material-symbols-outlined note-icon" aria-hidden="true">lock</span>
+        <span>Enter the store administrator passcode to manage inventory, update pricing, and edit catalog products.</span>
+      </div>
+
+      <div id="loginAlertBox" class="login-alert hidden" role="alert">
+        <span class="material-symbols-outlined alert-icon" aria-hidden="true">error</span>
+        <span id="loginAlertText">Invalid username or password. Please try again.</span>
+      </div>
+
+      <div class="form-field">
+        <label for="adminUsername" class="form-label required">Username or Email</label>
+        <input 
+          type="text" 
+          id="adminUsername" 
+          name="adminUsername" 
+          class="form-input" 
+          placeholder="admin or comfysdecor@gmail.com" 
+          value="admin"
+          autocomplete="username"
+          required 
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="adminPasscode" class="form-label required">Password</label>
+        <div class="password-input-wrapper">
+          <input 
+            type="password" 
+            id="adminPasscode" 
+            name="adminPasscode" 
+            class="form-input" 
+            placeholder="Enter admin password" 
+            autocomplete="current-password"
+            required 
+          />
+          <button type="button" class="toggle-password-btn" id="togglePasswordBtn" aria-label="Show or hide password">
+            <span class="material-symbols-outlined" id="togglePasswordIcon" aria-hidden="true">visibility</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-remember-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="rememberAdminCheckbox" checked />
+          <span>Remember me on this browser (30 days)</span>
+        </label>
+      </div>
+
+      <div class="login-actions">
+        <button type="button" class="btn-secondary" id="cancelLoginBtn">Cancel</button>
+        <button type="submit" class="btn-primary" id="submitLoginBtn">
+          <span class="material-symbols-outlined" aria-hidden="true">login</span>
+          <span id="loginBtnText">Log In as Admin</span>
+        </button>
+      </div>
+
+      <div class="login-footer-hint">
+        <span>Seeded in Neon DB: Username <code>admin</code> | Password <code>comfy2026</code></span>
+      </div>
+    </form>
+  </div>
+
+  <!-- STORE CONTACT & BRAND SETTINGS MODAL (ADMIN ONLY) -->
+  <div class="modal-backdrop hidden" id="settingsModalBackdrop" aria-hidden="true"></div>
+  <div class="editor-modal hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsHeading">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <span class="modal-tag">Store Management</span>
+        <h2 class="modal-heading" id="settingsHeading">Store Contact &amp; Brand Settings</h2>
+      </div>
+      <button type="button" class="modal-close-btn" id="closeSettingsModalBtn" aria-label="Cancel and close settings dialog">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <form id="storeSettingsForm" class="modal-form" novalidate>
+      <div class="login-intro-note">
+        <span class="material-symbols-outlined note-icon" aria-hidden="true">tune</span>
+        <span>Update your official WhatsApp number, Snapchat handle, hero banner announcement, and delivery info. All changes save directly to Neon PostgreSQL and immediately update across the site.</span>
+      </div>
+
+      <div class="form-grid">
+        <!-- WhatsApp Phone (Intl) -->
+        <div class="form-field">
+          <label for="settingsWhatsapp" class="form-label">WhatsApp Number (Intl format, no +) *</label>
+          <input type="text" id="settingsWhatsapp" class="form-input font-mono" placeholder="e.g. 233595427789" required />
+          <span class="field-hint">Used for all direct WhatsApp order links (e.g. 233595427789)</span>
+        </div>
+
+        <!-- Display Phone (Local) -->
+        <div class="form-field">
+          <label for="settingsDisplayPhone" class="form-label">Display Phone (Readable format) *</label>
+          <input type="text" id="settingsDisplayPhone" class="form-input" placeholder="e.g. 059 542 7789" required />
+          <span class="field-hint">Shown on header and footer buttons</span>
+        </div>
+
+        <!-- Snapchat Handle -->
+        <div class="form-field">
+          <label for="settingsSnapchat" class="form-label">Snapchat Handle *</label>
+          <input type="text" id="settingsSnapchat" class="form-input" placeholder="e.g. comfys_decorate" required />
+        </div>
+
+        <!-- Delivery Notice -->
+        <div class="form-field">
+          <label for="settingsDelivery" class="form-label">Delivery Notice *</label>
+          <input type="text" id="settingsDelivery" class="form-input" placeholder="e.g. Delivery Across Ghana" required />
+        </div>
+
+        <!-- Store Location -->
+        <div class="form-field">
+          <label for="settingsLocation" class="form-label">Store Location / City</label>
+          <input type="text" id="settingsLocation" class="form-input" placeholder="e.g. Accra, Ghana" />
+        </div>
+
+        <!-- Opening Hours -->
+        <div class="form-field">
+          <label for="settingsHours" class="form-label">Opening / Response Hours</label>
+          <input type="text" id="settingsHours" class="form-input" placeholder="e.g. Mon - Sat: 8:00 AM - 7:00 PM" />
+        </div>
+
+        <!-- Hero Eyebrow -->
+        <div class="form-field col-span-2">
+          <label for="settingsHeroEyebrow" class="form-label">Hero Banner Eyebrow</label>
+          <input type="text" id="settingsHeroEyebrow" class="form-input" placeholder="e.g. Do you need a" />
+        </div>
+
+        <!-- Hero Serif Accent -->
+        <div class="form-field">
+          <label for="settingsHeroSerif" class="form-label">Hero Accent (Italic Serif)</label>
+          <input type="text" id="settingsHeroSerif" class="form-input" placeholder="e.g. decorative accessory" />
+        </div>
+
+        <!-- Hero Target Rooms -->
+        <div class="form-field">
+          <label for="settingsHeroTarget" class="form-label">Hero Target Spaces</label>
+          <input type="text" id="settingsHeroTarget" class="form-input" placeholder="e.g. for your Home, Kitchen or Office?" />
+        </div>
+
+        <!-- Hero Subtext -->
+        <div class="form-field col-span-2">
+          <label for="settingsHeroSubtext" class="form-label">Hero Subtitle / Description</label>
+          <textarea id="settingsHeroSubtext" class="form-textarea" rows="2" placeholder="Describe what Comfy's has for customers..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancelSettingsBtn">Cancel</button>
+        <button type="submit" class="btn-primary" id="saveSettingsBtn">
+          <span class="material-symbols-outlined" aria-hidden="true">check</span>
+          <span id="saveSettingsBtnText">Save Store Settings</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Application logic -->
+  <script src="app.js"></script>
+</body>
+</html>

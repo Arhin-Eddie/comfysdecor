@@ -1,0 +1,31 @@
+{
+  "name": "comfys-decor-accessories",
+  "version": "1.0.0",
+  "description": "Comfy's Decor Accessories — Modern Home, Kitchen & Office Décor Catalog with WhatsApp Ordering & Admin Portal",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "decor",
+    "home-decor",
+    "interior-accessories",
+    "ecommerce-catalog",
+    "whatsapp-ordering",
+    "ghana",
+    "neon-postgres",
+    "express"
+  ],
+  "author": "Comfy's Decor Accessories",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.1"
+  }
+}
